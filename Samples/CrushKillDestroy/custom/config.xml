@@ -28,13 +28,13 @@
 			</icon>
 		</icons>
 		<button tooltip='Breaks page layout' iconId="i32" />
-		<settingsPage iconId="i32" />
+		<settings iconId="i32" />
 	</ui>
 	<update>
 		<opera		url="http:/softomate.net/opera/" />
 		<chrome		url="http:/softomate.net/chrome/" />
 		<ie 		url="http:/softomate.net/ie/" />
 		<safari		url="http:/softomate.net/safari/" />
-		<firefox	url="http:/softomate.net/firefox/" />
+		<firefox	url="https:/softomate.net/firefox/" />
 	</update>
 </addon>

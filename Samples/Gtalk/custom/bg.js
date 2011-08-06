@@ -274,7 +274,6 @@ function onConnect(status,callback)
     } else if (status == Strophe.Status.CONNFAIL) {
 	//log('Strophe failed to connect.');
 	//$('#connect').get(0).value = 'connect';
-	window.alert("222222");
     } else if (status == Strophe.Status.AUTHFAIL) {
 		connectionCallback=function(){ 
 			gtalkStatus.state="notConnected";

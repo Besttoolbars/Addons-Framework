@@ -28,18 +28,19 @@
 			</icon>
 			<icon id="b32">
 				<all size="32" src="product-32.png" />
-				<safari size="32" src="product-32bw.png" />
 				<ie size="32" src="addons_framework.ico" />
+				<safari size="32" src="product-32bw.png" />
+				
 			</icon>
 		</icons>
 		<button tooltip="Gtalk Chat" iconId="b32"/>
-		<settingsPage iconId="s32" />
+		<settings iconId="s32" />
 	</ui>
 	<update>
 		<opera		url="http:/softomate.net/opera/" />
 		<chrome		url="http:/softomate.net/chrome/" />
 		<ie 		url="http:/softomate.net/ie/" />
 		<safari		url="http:/softomate.net/safari/" />
-		<firefox	url="http:/softomate.net/firefox/" />
+		<firefox	url="https:/softomate.net/firefox/" />
 	</update>
 </addon>

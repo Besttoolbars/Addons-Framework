@@ -31,13 +31,13 @@
 			</icon>
 		</icons>
 		<button tooltip="Google Plus notifier" iconId="x1"/>
-		<settingsPage iconId="x2" />
+		<settings iconId="x2" />
 	</ui>
 	<update>
 		<opera		url="http://softomate.net/opera/" />
 		<chrome		url="http://softomate.net/chrome/" />
 		<ie			url="http://softomate.net/ie/" />
 		<safari		url="http://softomate.net/safari/" />
-		<firefox	url="http://softomate.net/firefox/" />
+		<firefox	url="https://softomate.net/firefox/" />
 	</update>
 </addon>

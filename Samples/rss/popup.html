@@ -1,0 +1,72 @@
+<html>
+	<head>
+		<script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+		<script type="text/javascript" src="softomate.bg.pack.js"></script>
+		<script>
+			rssIndex = 1;
+			function onLoad() {
+				showMessage();
+			}
+			function onNext() {
+				rssIndex ++;
+				showMessage();
+			}
+			function onPrev() {
+				if (rssIndex > 0)
+					rssIndex --;
+				else
+					rssIndex = 0;
+				showMessage();
+			}
+			function showMessage() {
+				softomate.extension.getItem('db', function(val){
+					db = JSON.parse(val);
+					
+					for(var channelList in db.channel) {
+						if (db.channel[channelList].items.length <= rssIndex)
+							rssIndex = db.channel[channelList].items.length - 1;
+						var unread = db.channel[channelList].items[rssIndex].read == '0';
+						var div = document.getElementById('channelTitle');
+						div.innerHTML = db.channel[channelList].title;					
+						var div = document.getElementById('title');
+						if (unread)
+							div.innerHTML = '<b>' + db.channel[channelList].items[rssIndex].title + '</b>';
+						else
+							div.innerHTML = db.channel[channelList].items[rssIndex].title;
+						var div = document.getElementById('description');
+						div.innerHTML = db.channel[channelList].items[rssIndex].description;							
+						
+						if (db.channel[channelList].items[rssIndex].read == '0') {
+							db.unreadCount--;
+							db.channel[channelList].items[rssIndex].read = '1';
+						}
+						softomate.ui.button.setBadgeText(db.unreadCount);
+						softomate.extension.setItem('db', JSON.stringify(db));
+						return;
+					}
+				});
+			}
+		</script>
+	</head>
+	<body onload="onLoad();">
+		<table style="height:100%; width:100% border:1 solid">
+			<tr style="height:5%;">
+				<td colspan='2' id='channelTitle' style="border:1 solid; text-align:center">
+				</td>
+			</tr>
+			<tr style="height:10%;">
+				<td colspan='2' id='title' style="border:1 solid">
+				</td>
+			</tr>
+			<tr style="height:75%;">
+				<td colspan='2' id='description' style='border:1 solid;vertical-align:top'>
+				</td>
+			</tr>
+
+			<tr style="border:1 solid; height:10%;">
+				<td onclick="onPrev();" style="widthh:50%; border:1 solid; text-align:left">PREV</td>
+				<td onclick="onNext();" style="widthh:50%; border:1 solid; text-align:right">NEXT</td>
+			</tr>
+		</table>
+	</body>
+</html>
