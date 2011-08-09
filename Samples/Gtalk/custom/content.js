@@ -36,7 +36,6 @@ softomate.extension.attachEvent('showBubble',function(data) {
  });
  
  softomate.extension.attachEvent('closeBubble',function(data) {  
- try{
 	if (window.top!==window)return;
 	
 	var checkGtalkElement=document.getElementById("softomate_ext_gtalkDiv");
@@ -55,8 +54,6 @@ softomate.extension.attachEvent('showBubble',function(data) {
 		softomate.extension.detachEvent('onPresence',onPresence);
 		document.documentElement.removeChild(checkGtalkElement);
 	}
-}
-catch(e){};
 	
  });
  
@@ -64,8 +61,7 @@ catch(e){};
  
 function openBubble(data) 
 {
-try
-{
+
 softomate.extension.fireEvent('getBaseUrl', {}, function(url){
 	if (window.top!==window) return;
 	baseUrl=url;
@@ -167,7 +163,7 @@ softomate.extension.fireEvent('getBaseUrl', {}, function(url){
 	$loginInput=$("<input/>");
 	$loginInput.attr("id","softomate_ext_loginInput");
 	$loginInput.attr("style","font-family:Georgia,serif !important; color:black !important; font-variant: small-caps !important; text-transform: none !important; font-weight: 100!important; font-size: 11pt !important; margin-bottom: 0 !important; width: 200px !important; height:20px!important;");
-	//$loginInput.attr("value","evgenknis@gmail.com");
+	$loginInput.attr("value","");
 	$loginInput.attr("type","text");
 	$loginInput.css("top","0px");
 	
@@ -182,7 +178,7 @@ softomate.extension.fireEvent('getBaseUrl', {}, function(url){
 	$passwordInput=$("<input/>");
 	$passwordInput.attr("id","softomate_ext_passwordInput");
 	$passwordInput.attr("style","font-family:Georgia,serif !important; color:black !important; font-variant: small-caps !important; text-transform: none !important; font-weight: 100!important; font-size: 11pt !important; margin-bottom: 0 !important; width: 200px !important; height:20px!important;");
-	//$passwordInput.attr("value","hawks1990");
+	$passwordInput.attr("value","");
 	$passwordInput.attr("type","password");
 	
 	$loginButton=$("<input/>");
@@ -464,8 +460,7 @@ softomate.extension.fireEvent('getBaseUrl', {}, function(url){
 		softomate.extension.fireEvent('logout', {}, function(res){});
     });
 });
-}
-catch(e){}
+
 }
 
 function onChatMessage(res,callback){
