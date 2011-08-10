@@ -1,0 +1,241 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="css/jquery.ui.all.css"> 
+		<link rel="stylesheet" href="css/additional.css"> 
+		<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
+		<script type="text/javascript" src="jquery-ui-1.8.15.custom.min.js"></script>
+	
+		<script>
+			
+			var $channelTabs;
+			var channelTabsCounter=0;
+			var rssChannels;
+			
+			function initChannelTabs()
+			{
+				
+				softomate.extension.getItem("rssChannels", function(data)
+				{
+					if ($channelTabs) $channelTabs.tabs( 'destroy' );
+					if (!data) return;
+					rssChannels = JSON.parse(data);
+				
+					
+					
+					$channelTabs=$( "#channelTabs" ).tabs({
+					add: function( event, ui ) {
+							var tab_content = getTabContentByIndex(ui.index);
+							$( ui.panel ).append(tab_content);
+						}				
+					});
+					
+					$.each($(rssChannels), function(i, rssChannel) {
+						if (rssChannel)
+						{
+							$channelTabs.tabs( "add", "#tabs-" + channelTabsCounter, rssChannel.name );
+							channelTabsCounter++;
+						}		
+					});
+				});
+			//		$channelTabs.tabs( 'destroy' );
+					
+			
+			
+			}
+			
+			
+			function createTable()
+			{
+				var $table = $("<table/>");
+				$table.append($("<tbody/>"));
+				return $table;
+			}
+				
+			function addRow($table)
+			{
+				var $tr=$("<tr/>");
+				$table.children("tbody").append($tr);
+				return $tr;
+			}
+			
+			function addCell($tr)
+			{
+				var $td=$("<td/>");
+				$tr.append($td);
+				return $td;
+			}
+			
+			
+			function generateLayout(index)
+			{
+				
+				var $mainDiv=$("<div/>");
+				$mainDiv.css({
+					"width":"100%"
+					});	
+				
+				var $contentDiv=$("<div>");
+				$contentDiv.css({
+					"width":"100%",
+					"height":"180px",
+					"overflow":"auto"
+					});	
+								
+				var $contentTable = createTable();
+				$contentTable.css({
+						"height":"160px",
+						"width" : "100%"
+					});
+				var $titleRow = addRow($contentTable);
+				$titleRow.css({
+						"height":"20%",
+						"width" : "100%",
+					});
+				var $titleCell = addCell($titleRow);
+				$titleCell.css({
+						"font" : "bold normal 10pt arial"
+					});
+				var $contentRow= addRow($contentTable);
+				$contentRow.css({
+						"height":"80%",
+						"width" : "100%",
+					});
+				var $contentCell = addCell($contentRow);
+				$contentCell.css({
+						"width" : "100%"
+					}).attr({
+						"valign":"top"
+					});
+				$contentDiv.append($contentTable);
+				$innerContentDiv=$("<div>");
+				$innerContentDiv.css({
+					"width":"100%"
+					});	
+				$contentCell.append($innerContentDiv);
+				
+				var $buttonTable = createTable();
+				$buttonTable.css({
+					"width":"100%",
+					"height":"32px"
+					});	
+				var $buttonRow= addRow($buttonTable);
+				var $prevButtonCell = addCell($buttonRow);
+				var $nextButtonCell = addCell($buttonRow);
+				$nextButtonCell.attr({
+					"align" : "right"
+				});
+				
+				
+				var $prevButtonImg= $("<img/>").attr({"src":"prev.png"});
+				var $nextButtonImg= $("<img/>").attr({"src":"next.png"});
+				
+				var i=0;
+				
+				$prevButtonImg.bind("click",function()
+				{
+					var content=getContentByIndex(index);
+					if (content) 
+					{
+						if (i>0) i--; else return;
+						$contentTable.hide("slide", { direction: "right" }, 100);
+						$innerContentDiv.html(content.items[i].description);
+						$titleCell.html(content.items[i].title);
+						
+						$titleCell.unbind();
+						$titleCell.bind("click",function()
+						{
+							softomate.browser.navigate({url: content.items[i].link, tabId: null});
+						});		
+						
+						$contentTable.show("slide", { direction: "left" }, 100);
+					}
+				});
+				
+				$nextButtonImg.bind("click",function()
+				{
+					var content=getContentByIndex(index);
+					if (content) 
+					{
+						if (i!=content.items.length-1) i++; else return;
+						$contentTable.hide("slide", { direction: "left" }, 100);
+						$innerContentDiv.html(content.items[i].description);
+						$titleCell.html(content.items[i].title);
+						
+						$titleCell.unbind();
+						$titleCell.bind("click",function()
+						{
+							softomate.browser.navigate({url: content.items[i].link, tabId: null});
+						});
+						
+						$contentTable.show("slide", { direction: "right" }, 100);
+					}
+				});
+				
+				
+				$prevButtonCell.append($prevButtonImg);
+				$nextButtonCell.append($nextButtonImg);
+
+				$mainDiv.append($contentDiv);
+				$mainDiv.append($buttonTable);
+				
+				var content=getContentByIndex(index);
+				if (content) 
+				{
+					if (content.items.length>0)
+					{
+						$innerContentDiv.html(content.items[i].description);
+						$titleCell.html(content.items[i].title);
+						$titleCell.unbind();
+						
+						$titleCell.bind("click",function()
+						{
+						safari.extension.globalPage.contentWindow.console.log(softomate.browser.navigate);
+							softomate.browser.navigate({url: content.items[i].link, newtab: true});
+						});		
+						
+					}
+				}
+				
+				
+				return $mainDiv;
+			}
+			
+			
+			function getTabContentByIndex(index)
+			{
+			
+				return generateLayout(index);
+			}
+			
+			function getContentByIndex(index)
+			{
+				return rssChannels[index].data;
+			}
+			
+			
+			
+			function onLoad()
+			{
+				//initChannelTabs();
+				//softomate.extension.detachEvent("updateContent",initChannelTabs);
+				//softomate.extension.attachEvent("updateContent",initChannelTabs);
+			}
+			
+			$(document).ready(function()
+			{
+				initChannelTabs();
+				softomate.extension.detachEvent("updateContent",initChannelTabs);
+				softomate.extension.attachEvent("updateContent",initChannelTabs);
+			});
+					
+		</script>
+	</head>
+	<body onload="onLoad();">
+		<div id="channelTabs"> 
+			<ul> 
+			</ul>
+		</div> 
+		
+		
+	</body>
+</html>
