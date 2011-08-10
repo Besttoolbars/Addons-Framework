@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <addon
 	version="1.0.0.0"
-	name="RSS Reader"
+	name="RSS reader"
 	filename="rssreader"
-	description="RSS Reader"
+	description="RSS reader"
 	url="http://softomate.net/"
 	author="Softomate">
 	
@@ -12,6 +12,7 @@
 		<opera		output=".\" />
 		<firefox	output=".\" />
 		<safari		output=".\" />
+
 		<!--ie			output=".\" /-->
 		<chrome		output=".\" />
 		
@@ -28,6 +29,7 @@
 				<all size="32" src="RSS-icon32.png" />
 				<all size="18" src="RSS-icon18.png" />
 				<ie size="32" src="rss.ico" />
+				<safari size="18" src="Icon_bw.png" />	
 			</icon>
 			<icon id="x2">
 				<all size="18" src="RSS-icon18.png" />
@@ -35,7 +37,7 @@
 				<all size="128" src="RSS-icon128.png" />
 			</icon>
 		</icons>
-		<button tooltip="RSS Reader" iconId="x1"/>
+		<button tooltip="RSS reader" iconId="x1"/>
 		<settings iconId="x2" options="options_page.html"/>
 	</ui>
 </addon>
