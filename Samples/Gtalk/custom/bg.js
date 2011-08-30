@@ -272,11 +272,13 @@ function onConnect(status,callback)
     if (status == Strophe.Status.CONNECTING) {
 	//log('Strophe is connecting.');
     } else if (status == Strophe.Status.CONNFAIL) {
-	//log('Strophe failed to connect.');
-	//$('#connect').get(0).value = 'connect';
-	window.alert("222222");
-    } else if (status == Strophe.Status.AUTHFAIL) {
-		connectionCallback=function(){ 
+		gtalkStatus.state="notConnected";
+		softomate.extension.fireEvent('onConnect', {status : gtalkStatus, friendList : friendList}, function(){});    
+	} 
+	else if (status == Strophe.Status.AUTHFAIL) {
+	console.log("aurh")
+		connectionCallback=function()
+		{ 
 			gtalkStatus.state="notConnected";
 			framework.extension.fireEvent('onConnect', {status : gtalkStatus, friendList : friendList}, function(){});
 		}

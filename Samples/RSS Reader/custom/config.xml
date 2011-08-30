@@ -9,7 +9,6 @@
 	
 	<interface name="framework" />
 	<browser>
-		
 		<opera		output=".\" />
 		<firefox	output=".\" />
 		<safari		output=".\" />
