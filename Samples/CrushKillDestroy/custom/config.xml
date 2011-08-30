@@ -7,6 +7,7 @@
 	url="http://softomate.net/"
 	author="Softomate">
 	
+	<interface name="softomate" />
 	<browser>
 		<chrome		output=".\" />
 		<opera		output=".\" />

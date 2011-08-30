@@ -7,12 +7,11 @@
 	url="http://softomate.net/"
 	author="Softomate">
 	
+	<interface name="softomate" />
 	<browser>
-		
 		<opera		output=".\" />
 		<firefox	output=".\" />
 		<safari		output=".\" />
-
 		<!--ie			output=".\" /-->
 		<chrome		output=".\" />
 		
