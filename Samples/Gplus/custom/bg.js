@@ -5,8 +5,8 @@ var iDelay = 60, //-- delay in seconds
 
 function init() {
 	startRequest();
-	softomate.ui.button.setBadgeBackgroundColor('#cc3c29');
-	softomate.ui.button.attachEvent('ButtonClick', function () {
+	framework.ui.button.setBadgeBackgroundColor('#cc3c29');
+	framework.ui.button.attachEvent('ButtonClick', function () {
 		goToInbox();
 	});
 }
@@ -56,7 +56,8 @@ function getInboxCount(onSuccess, onError) {
 			return;
 		}
 		if (xhr.responseText) {
-			var match = /['"]a-za-Tf['"],['"]300['"], ([0-9]+).0/i.exec(xhr.responseText);
+			//var match = /['"]a-za-Tf['"],['"]300['"], ([0-9]+).0/i.exec(xhr.responseText);
+			var match = /['"],['"]300['"], ([0-9]+).0/i.exec(xhr.responseText);
 			if(null != match){
 				handleSuccess(match[1]);
 			}
@@ -73,18 +74,18 @@ function getInboxCount(onSuccess, onError) {
 }
 
 function updateUnreadCount(count) {
-	softomate.ui.button.setIcon('gplus_16.png');
-	softomate.ui.button.setBadgeText(count);
+	framework.ui.button.setIcon('gplus_16.png');
+	framework.ui.button.setBadgeText(count);
 }
 
 function showLoggedOut() {
 	iUnreadedCount = 0;
-	softomate.ui.button.setBadgeText('');
-	softomate.ui.button.setIcon('gplus_16_off.png');
+	framework.ui.button.setBadgeText('');
+	framework.ui.button.setIcon('gplus_16_off.png');
 }
 
 function goToInbox() {
-	softomate.browser.navigate({
+	framework.browser.navigate({
 		'url': 'https://plus.google.com/'
 	});
 }

@@ -1,3 +1,3 @@
-softomate.ui.button.attachEvent('ButtonClick', function(){
-	softomate.extension.fireEvent('removeImage', {});
+framework.ui.button.attachEvent('ButtonClick', function(){
+	framework.extension.fireEvent('removeImage', {});
 });

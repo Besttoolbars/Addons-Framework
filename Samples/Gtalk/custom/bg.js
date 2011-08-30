@@ -24,16 +24,16 @@ var userPassword="";
 
 
 
-softomate.extension.getItem("userName",function(uName){
+framework.extension.getItem("userName",function(uName){
 	userName=uName;
-	softomate.extension.getItem("userPassword",function(uPassword){
+	framework.extension.getItem("userPassword",function(uPassword){
 		userPassword=uPassword;
 		if (userName && userPassword)
 		{
 			gtalkStatus.state="connecting";
 			connectionCallback=function(friendList){			
 				gtalkStatus.state="connected";
-				softomate.extension.fireEvent('onConnect', {status : gtalkStatus, friendList : friendList}, function(){});
+				framework.extension.fireEvent('onConnect', {status : gtalkStatus, friendList : friendList}, function(){});
 				sendPresence("default","");
 			}
 			connectGtalk();
@@ -42,7 +42,7 @@ softomate.extension.getItem("userName",function(uName){
 
 });
 
-softomate.extension.attachEvent("getBaseUrl",function(data,callback){
+framework.extension.attachEvent("getBaseUrl",function(data,callback){
 	var i=document.location.href.lastIndexOf("/");
 	var result= document.location.href.substring(0, i+1);
 	callback(result);
@@ -50,64 +50,64 @@ softomate.extension.attachEvent("getBaseUrl",function(data,callback){
 
 
 
-softomate.browser.attachEvent("TabChanged",function(data){
+framework.browser.attachEvent("TabChanged",function(data){
 	if (bubbleOpened)
 	{
-		softomate.extension.fireEvent('refreshBubble', data, function(){});
+		framework.extension.fireEvent('refreshBubble', data, function(){});
 	}
 	
 });
 
-softomate.ui.button.attachEvent("ButtonClick",function(data){
+framework.ui.button.attachEvent("ButtonClick",function(data){
 	if (!bubbleOpened)
 	{
-		softomate.extension.fireEvent('showBubble', data, function(){});
+		framework.extension.fireEvent('showBubble', data, function(){});
 		bubbleOpened=true;
 	}
 	else
 	{
-		softomate.extension.fireEvent('closeBubble', {}, function(){});
+		framework.extension.fireEvent('closeBubble', {}, function(){});
 		bubbleOpened=false;
 	}
 });
 
-softomate.extension.attachEvent("connect",function(data,callback){
+framework.extension.attachEvent("connect",function(data,callback){
 	gtalkStatus.state="connecting";
-	softomate.extension.fireEvent('onConnectStarted', {status : gtalkStatus}, function(){});
+	framework.extension.fireEvent('onConnectStarted', {status : gtalkStatus}, function(){});
 	userName=data.userName;
 	userPassword=data.userPassword;
 	if (data.saveAuth)
 	{
-		softomate.extension.setItem("userName",userName);
-		softomate.extension.setItem("userPassword",userPassword);
+		framework.extension.setItem("userName",userName);
+		framework.extension.setItem("userPassword",userPassword);
 	}
 	else
 	{
-		softomate.extension.setItem("userName","");
-		softomate.extension.setItem("userPassword","");
+		framework.extension.setItem("userName","");
+		framework.extension.setItem("userPassword","");
 	}
 	connectionCallback=function(friendList){ 
 		//console.log(e);
 		//callback(e);
 		gtalkStatus.state="connected";
-		softomate.extension.fireEvent('onConnect', {status : gtalkStatus, friendList : friendList}, function(){});
+		framework.extension.fireEvent('onConnect', {status : gtalkStatus, friendList : friendList}, function(){});
 	
 	}
 	connectGtalk();
 });
 
-softomate.extension.attachEvent("logout",function(data,callback){
+framework.extension.attachEvent("logout",function(data,callback){
 	gtalkStatus.state="disconnecting";
-	softomate.extension.fireEvent('onDisconnectStarted', {status : gtalkStatus}, function(){});
+	framework.extension.fireEvent('onDisconnectStarted', {status : gtalkStatus}, function(){});
 	connectionCallback=function(){ 
 		gtalkStatus.state="notConnected";
-		softomate.extension.fireEvent('onDisconnect', {status : gtalkStatus}, function(){});
+		framework.extension.fireEvent('onDisconnect', {status : gtalkStatus}, function(){});
 	}
 	disconnectGtalk();
 });
 
 
-softomate.extension.attachEvent("connectRequest",function(data,callback){
+framework.extension.attachEvent("connectRequest",function(data,callback){
 	var result={status:gtalkStatus, friendList:friendList, presenceList : presenceList};
 	if (gtalkStatus.state=="connected")
 	{
@@ -115,31 +115,31 @@ softomate.extension.attachEvent("connectRequest",function(data,callback){
 			result.status=gtalkStatus;
 			result.friendList=friendList;
 			//callback(result);
-			softomate.extension.fireEvent('onConnectRequest', result, function(){});
+			framework.extension.fireEvent('onConnectRequest', result, function(){});
 		});
 	}
 	else 
 	{
-		softomate.extension.fireEvent('onConnectRequest', result, function(){});
+		framework.extension.fireEvent('onConnectRequest', result, function(){});
 		//callback(result);
 	}
 });
 
 
-softomate.extension.attachEvent("openChatWindow",function(data,callback){
+framework.extension.attachEvent("openChatWindow",function(data,callback){
 	gtalkStatus.state="chatting";
 	gtalkStatus.friend=data.friend
-	softomate.extension.fireEvent('onOpenChatWindow', data, function(){});
+	framework.extension.fireEvent('onOpenChatWindow', data, function(){});
 });
 
 
-softomate.extension.attachEvent("closeChatWindow",function(data,callback){
+framework.extension.attachEvent("closeChatWindow",function(data,callback){
 	gtalkStatus.state="connected";
-	softomate.extension.fireEvent('onCloseChatWindow', data, function(){});
+	framework.extension.fireEvent('onCloseChatWindow', data, function(){});
 });
 
 
-softomate.extension.attachEvent("sendChatMessage",function(data,callback){	
+framework.extension.attachEvent("sendChatMessage",function(data,callback){	
 		connection.send($msg({to: data.friend.jid}).c('body').t(data.message));
 		
 		if (!messageList[data.friend.jid]) messageList[data.friend.jid]={messages:[]};
@@ -151,27 +151,27 @@ softomate.extension.attachEvent("sendChatMessage",function(data,callback){
 			messageList[data.friend.jid].messages.slice(1);
 		}
 		
-		softomate.extension.fireEvent('onSendChatMessage', data, function(){});	
+		framework.extension.fireEvent('onSendChatMessage', data, function(){});	
 });
 
 	
-softomate.extension.attachEvent("onDocumentComplete",function(data,callback){
+framework.extension.attachEvent("onDocumentComplete",function(data,callback){
 	if (bubbleOpened)
 	{
-		softomate.extension.fireEvent('refreshBubble', {browserId:data.browserId}, function(){});
+		framework.extension.fireEvent('refreshBubble', {browserId:data.browserId}, function(){});
 	}
 });
 
-softomate.extension.attachEvent("getStatus",function(data,callback){
+framework.extension.attachEvent("getStatus",function(data,callback){
 	callback(gtalkStatus);
 });
 
-softomate.extension.attachEvent("getMessageList",function(data,callback){
+framework.extension.attachEvent("getMessageList",function(data,callback){
 	callback(messageList[data.friend.jid]);
 });
 
 
-softomate.extension.attachEvent("sendPresence",function(data,callback){
+framework.extension.attachEvent("sendPresence",function(data,callback){
 	sendPresence("default","");
 });
 
@@ -223,7 +223,7 @@ console.log('RECV: ' + data);
 			{
 				if ($jid==gtalkStatus.friend.jid)
 				{
-					softomate.extension.fireEvent('onChatMessage', {jid : $jid, message : $body.text() }, function(){});	
+					framework.extension.fireEvent('onChatMessage', {jid : $jid, message : $body.text() }, function(){});	
 				}
 			}
 		}
@@ -257,7 +257,7 @@ console.log('RECV: ' + data);
 	});
 	if ($presenses.length>0) 
 	{
-		softomate.extension.fireEvent('onPresence', presenceList, function(){});
+		framework.extension.fireEvent('onPresence', presenceList, function(){});
 	}
 }
 
@@ -278,7 +278,7 @@ function onConnect(status,callback)
     } else if (status == Strophe.Status.AUTHFAIL) {
 		connectionCallback=function(){ 
 			gtalkStatus.state="notConnected";
-			softomate.extension.fireEvent('onConnect', {status : gtalkStatus, friendList : friendList}, function(){});
+			framework.extension.fireEvent('onConnect', {status : gtalkStatus, friendList : friendList}, function(){});
 		}
 		disconnectGtalk();		 
 	} else if (status == Strophe.Status.DISCONNECTING) {

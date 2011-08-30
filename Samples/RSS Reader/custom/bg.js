@@ -16,8 +16,7 @@ var requestInterval;
 
 
 
-softomate.extension.attachEvent("updateList",function(_list)
-{
+framework.extension.attachEvent("updateList",function(_list) {
 	list=_list;
 	abortAllRequests();
 	if (requestInterval) clearInterval(requestInterval);
@@ -29,51 +28,37 @@ softomate.extension.attachEvent("updateList",function(_list)
 
     
 function init() {
-	softomate.extension.getItem("rssChannels", function(data) {
-		
-		if (data)
-		{
+	framework.extension.getItem("rssChannels", function(data) {
+		if (data) {
 			list = JSON.parse(data);
 		}
-		else
-		{
+		else {
 			var obj={name:"",url:""};
 			list.push(obj);
-			softomate.extension.setItem("rssChannels", JSON.stringify(list))
+			framework.extension.setItem("rssChannels", JSON.stringify(list))
 		}
 		getChannelsData();
-		requestInterval=setInterval(getChannelsData,requestTimeout);
+		requestInterval = setInterval(getChannelsData,requestTimeout);
 	});
-	
-	
-	
-	
 }
 
-
-
-function getChannelsData()
-{
+function getChannelsData(){
 	$.each($(list), function(i, channel) {
-		if (channel)
-		{
-			sendChannelRequest(channel, function(data)
-			{
-			console.log(parseChannelData(data));
+		
+		if (channel) {
+			sendChannelRequest(channel, function(data){
+				console.log(parseChannelData(data));
 				channel.data = parseChannelData(data);
 				
-				softomate.extension.setItem("rssChannels", JSON.stringify(list));
+				framework.extension.setItem("rssChannels", JSON.stringify(list));
 			});
 		}		
 	});
-
 }
 
-function parseChannelData(data)
-{
+function parseChannelData(data) {
 	var xmlDoc = $.parseXML(data);
 	$xml = $(xmlDoc);
-	//console.log(xmlDoc);
     $channelElement = $xml.find("channel");
     $itemsElements = $xml.find("item");
  
@@ -98,10 +83,8 @@ function parseChannelData(data)
 }
 
 
-function removeRequestFromArray(xmlhttp)
-{
-	for(var i=0; i<requestsArray.length;i++ )
-	{ 
+function removeRequestFromArray(xmlhttp) {
+	for(var i=0; i<requestsArray.length;i++ ) { 
 		if(requestsArray[i]==xmlhttp)
 		{
 			requestsArray.splice(i,1);
@@ -110,12 +93,9 @@ function removeRequestFromArray(xmlhttp)
 	} 
 }
 
-function abortAllRequests()
-{
-	for(var i=0; i<requestsArray.length;i++ )
-	{ 
-		if (requestsArray[i]) 
-		{
+function abortAllRequests() {
+	for(var i=0; i<requestsArray.length;i++ ) { 
+		if (requestsArray[i]) {
 			requestsArray[i].abort();
 			delete requestsArray[i];
 		}
@@ -124,19 +104,15 @@ function abortAllRequests()
 }
 
 
-function sendChannelRequest(channel,callback)
-{
-	var xmlhttp=softomate.extension.getRequest();
-	  xmlhttp.open("GET", channel.url, true);
-	  xmlhttp.onreadystatechange = function(data)
-	  {
-		if (xmlhttp.readyState == 4)
-		{
+function sendChannelRequest(channel,callback) {
+	var xmlhttp = framework.extension.getRequest();
+	xmlhttp.open("GET", channel.url, true);
+	xmlhttp.onreadystatechange = function(data) {
+		if (xmlhttp.readyState == 4) {
 			var status=xmlhttp.status;
 			var response=xmlhttp.responseText;
 			removeRequestFromArray(xmlhttp);
-			if (status == 200)
-			{
+			if (status == 200) {
 				callback(response);
 			}
 		}
@@ -146,13 +122,13 @@ function sendChannelRequest(channel,callback)
 }
 
 init();
-softomate.ui.button.setPopup({
+framework.ui.button.setPopup({
     url:"popup.html",
     width:400,
     height:300
 });
 
-softomate.ui.button.attachEvent('ButtonClick', function () {
-    softomate.extension.fireEvent("updateContent",{});
+framework.ui.button.attachEvent('ButtonClick', function () {
+    framework.extension.fireEvent("updateContent",{});
 });
 

@@ -14,7 +14,7 @@
 			function initChannelTabs()
 			{
 				
-				softomate.extension.getItem("rssChannels", function(data)
+				framework.extension.getItem("rssChannels", function(data)
 				{
 					if ($channelTabs) $channelTabs.tabs( 'destroy' );
 					if (!data) return;
@@ -144,7 +144,7 @@
 						$titleCell.unbind();
 						$titleCell.bind("click",function()
 						{
-							softomate.browser.navigate({url: content.items[i].link, tabId: null});
+							framework.browser.navigate({url: content.items[i].link, tabId: null});
 						});		
 						
 						$contentTable.show("slide", { direction: "left" }, 100);
@@ -164,7 +164,7 @@
 						$titleCell.unbind();
 						$titleCell.bind("click",function()
 						{
-							softomate.browser.navigate({url: content.items[i].link, tabId: null});
+							framework.browser.navigate({url: content.items[i].link, tabId: null});
 						});
 						
 						$contentTable.show("slide", { direction: "right" }, 100);
@@ -189,8 +189,8 @@
 						
 						$titleCell.bind("click",function()
 						{
-						safari.extension.globalPage.contentWindow.console.log(softomate.browser.navigate);
-							softomate.browser.navigate({url: content.items[i].link, newtab: true});
+						safari.extension.globalPage.contentWindow.console.log(framework.browser.navigate);
+							framework.browser.navigate({url: content.items[i].link, newtab: true});
 						});		
 						
 					}
@@ -217,15 +217,15 @@
 			function onLoad()
 			{
 				//initChannelTabs();
-				//softomate.extension.detachEvent("updateContent",initChannelTabs);
-				//softomate.extension.attachEvent("updateContent",initChannelTabs);
+				//framework.extension.detachEvent("updateContent",initChannelTabs);
+				//framework.extension.attachEvent("updateContent",initChannelTabs);
 			}
 			
 			$(document).ready(function()
 			{
 				initChannelTabs();
-				softomate.extension.detachEvent("updateContent",initChannelTabs);
-				softomate.extension.attachEvent("updateContent",initChannelTabs);
+				framework.extension.detachEvent("updateContent",initChannelTabs);
+				framework.extension.attachEvent("updateContent",initChannelTabs);
 			});
 					
 		</script>

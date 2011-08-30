@@ -35,16 +35,16 @@ function setSelectionRange(el, words) {
 
 	}
 }
-softomate.browser.attachEvent('DocumentComplete', function(e){
+framework.browser.attachEvent('DocumentComplete', function(e){
 	if (document.body)
-		softomate.extension.getItem('words', function(words) {
+		framework.extension.getItem('words', function(words) {
 			words = (words && words != 'undefined') ? JSON.parse(words) : [];
-			softomate.extension.fireEvent('updateBadge', words.length);
+			framework.extension.fireEvent('updateBadge', words.length);
 			setSelectionRange(document.body, words);
 		});
 });
-softomate.extension.attachEvent('AddWord', function(e) {
-	softomate.extension.getItem('words', function(words) {
+framework.extension.attachEvent('AddWord', function(e) {
+	framework.extension.getItem('words', function(words) {
 		words = words ? JSON.parse(words) : [];
 		var word = window.getSelection().toString();
 		if (word.length == 0)
@@ -52,9 +52,9 @@ softomate.extension.attachEvent('AddWord', function(e) {
 		words.push(word);
 		if (words.length > 100)
 			words.shift();
-		softomate.extension.setItem('words', JSON.stringify(words));
+		framework.extension.setItem('words', JSON.stringify(words));
 		if (document.body)
 			setSelectionRange(document.body, words);
-		softomate.extension.fireEvent('updateBadge', words.length);
+		framework.extension.fireEvent('updateBadge', words.length);
 	});
 });

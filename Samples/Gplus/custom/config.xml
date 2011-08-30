@@ -4,9 +4,10 @@
 	name="Google Plus notifier"
 	filename="gplus"
 	description="Google Plus notifier"
-	url="http://softomate.net/"
-	author="Softomate">
+	url="http://sample.net/"
+	author="Sample">
 	
+	<interface name="framework" />
 	<browser>
 		<chrome		output=".\" />
 		<opera		output=".\" />
@@ -34,10 +35,10 @@
 		<settings iconId="x2" />
 	</ui>
 	<update>
-		<opera		url="http://softomate.net/opera/" />
-		<chrome		url="http://softomate.net/chrome/" />
-		<ie			url="http://softomate.net/ie/" />
-		<safari		url="http://softomate.net/safari/" />
-		<firefox	url="https://softomate.net/firefox/" />
+		<opera		url="http://sample.net/opera/" />
+		<chrome		url="http://sample.net/chrome/" />
+		<ie			url="http://sample.net/ie/" />
+		<safari		url="http://sample.net/safari/" />
+		<firefox	url="https://sample.net/firefox/" />
 	</update>
 </addon>

@@ -1,4 +1,4 @@
-softomate.browser.attachEvent('DocumentComplete', function(e){
+framework.browser.attachEvent('DocumentComplete', function(e){
 	var body = document.getElementsByTagName('body')[0];
 	if (!body)
 		return;
@@ -14,7 +14,7 @@ softomate.browser.attachEvent('DocumentComplete', function(e){
 	div.style.background = "url(http://chart.apis.google.com/chart?chf=bg,s,FFFFFF&chs=100x100&cht=qr&chl=" + window.location + ")";
 	body.appendChild(div);	
 });
-softomate.extension.attachEvent('removeImage', function(e) {
+framework.extension.attachEvent('removeImage', function(e) {
 	var body = document.getElementsByTagName('body')[0];
 	if (!body)
 		return;

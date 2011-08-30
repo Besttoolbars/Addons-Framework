@@ -1,4 +1,4 @@
-softomate.extension.attachEvent('ButtonClicked', function(e) {
+framework.extension.attachEvent('ButtonClicked', function(e) {
 	$(document).ready(function(){
 		R = 0;
 		x1 = .1;
@@ -27,6 +27,6 @@ softomate.extension.attachEvent('ButtonClicked', function(e) {
 	});	
 });
 
-softomate.extension.attachEvent('ReloadPage', function(e) {	
+framework.extension.attachEvent('ReloadPage', function(e) {	
 	window.location.reload();
 });

@@ -1,19 +1,18 @@
 <html>
-	<head><script type="text/javascript" src="jquery-1.6.2.min.js"></script>
-<script src="softomate.content.pack.js" ></script>
+	<head>
 		<script type="text/javascript" src="jquery.dataTables.min.js"></script>
-			<script type="text/javascript" src="jquery.dataTables.utils.js"></script>
-			<style>
-				.normalRow {background-color: #FFEBCD; border: 0px solid  #FF7722; height:20px; font: 80%/1.45em "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; color: #AA5303;}
-				.channelTable {border: 1px solid  #FF7722; border-collapse:collapse !important;}
-				.normalColumn {padding-left: 10px; border: 0px solid  #FF7722;}
-				
-				.headRow {background-color:  #FFE4C4; border: 1px solid  #FF7722; font: 80%/1.45em "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; color:  #DD7500;}
-				.headColumn { border: 1px solid  #FF7722; }
-				.row_selected {background-color: #FFD39B;}
-				.dataTables_empty
-				
-			</style>
+		<script type="text/javascript" src="jquery.dataTables.utils.js"></script>
+		<style>
+			.normalRow {background-color: #FFEBCD; border: 0px solid  #FF7722; height:20px; font: 80%/1.45em "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; color: #AA5303;}
+			.channelTable {border: 1px solid  #FF7722; border-collapse:collapse !important;}
+			.normalColumn {padding-left: 10px; border: 0px solid  #FF7722;}
+			
+			.headRow {background-color:  #FFE4C4; border: 1px solid  #FF7722; font: 80%/1.45em "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; color:  #DD7500;}
+			.headColumn { border: 1px solid  #FF7722; }
+			.row_selected {background-color: #FFD39B;}
+			.dataTables_empty
+			
+		</style>
 	</head>
 	<body>
 		<div id="mainSettingsDiv" style="width:400px; height:100%;"> 
@@ -149,13 +148,13 @@
 				bindHandlers($(channelTable.fnGetNodes()[index]),$(channelTable.fnGetNodes()[index]).children());
 				applyStyles();
 				list.push(channel);
-				//softomate.extension.setItem("rssChannels",JSON.stringify(list));
+				//framework.extension.setItem("rssChannels",JSON.stringify(list));
 			}
 			
 			function saveData()
 			{
-				softomate.extension.setItem("rssChannels",JSON.stringify(list));
-				softomate.extension.fireEvent("updateList",list);
+				framework.extension.setItem("rssChannels",JSON.stringify(list));
+				framework.extension.fireEvent("updateList",list);
 			}
 			
 			function updateData(textValue,position)
@@ -299,7 +298,7 @@
 			}
 			
 		
-			softomate.extension.getItem("rssChannels",function(_channels)
+			framework.extension.getItem("rssChannels",function(_channels)
 			{
 			
 				var channels=JSON.parse(_channels);
