@@ -9,13 +9,14 @@
 	
 	<interface name="framework" />
 	<browser>
-		<chrome		output=".\" />
-		<opera		output=".\" />
-		<safari		output=".\" />
-		<firefox	output=".\" />
+		<chrome		output="out\" />
+		<opera		output="out\" />
+		<safari		output="out\" />		
+		<ie			output="out\" />
+		<firefox	output="out\" />
 	</browser>
 	<content>
-		<script src="content.js" />
+		<script src="content.js" />		
 	</content>
 	<background>
 		<script src="bg.js" />
@@ -24,6 +25,9 @@
 		<icons>
 			<icon id="i32">
 				<all size="32" src="32x32.png" />
+				<all size="18" src="18x18.png" />
+				<all size="16" src="16x16.png" />
+				<ie size="16" src="16x16.ico" />
 			</icon>
 		</icons>
 		<button tooltip="Highlight" iconId="i32"/>
@@ -34,6 +38,6 @@
 		<chrome 	url="http://sample.net/chrome/" />
 		<ie 		url="http://sample.net/ie/" />
 		<safari 	url="http://sample.net/safari/" />
-		<firefox	url="https:/sample.net/firefox/" />
+		<firefox	url="https://sample.net/firefox/" />
 	</update>
 </addon>

@@ -1,3 +1,7 @@
+try {
+	framework.ui.button.showBadge();
+} catch(e) {}
+
 framework.ui.button.attachEvent('ButtonClick', function(e){
 	framework.extension.fireEvent('AddWord', e);
 });
