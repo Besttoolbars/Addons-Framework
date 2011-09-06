@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
 		<script type="text/javascript" src="jquery.dataTables.min.js"></script>
 		<script type="text/javascript" src="jquery.dataTables.utils.js"></script>
 		<style>
@@ -13,36 +14,10 @@
 			.dataTables_empty
 			
 		</style>
-	</head>
-	<body>
-		<div id="mainSettingsDiv" style="width:400px; height:100%;"> 
-			<div id="channelsDiv">
-			<table class="channelTable" id="channelTable"></table>
-			
-			</div>
-			<div style="" id="channelsButtonsDiv">
-			<table width="100%">
-			<tr>
-				<td>
-					<a href="javascript:void(0);" onclick="saveData();">save changes<a/>
-				</td>
-				<td align="right">
-					<span id="addButton" style="padding="3px;"><img src="add.png"/></span>
-					<span id="removeButton" style="padding="3px;"><img src="remove.png"/></span>
-				</td>
-			</tr>
-			</table>
-			<div/>
-			
-		</div> 
-		
-		
-		
 			<script>		
 			var list=[];
 			var channelTable;
-			function Channel(data)
-			{
+			function Channel(data) {
 				this.className = "Channel";
 				this.name=data.name;
 				this.url=data.url
@@ -54,8 +29,7 @@
 				}
 			}
 			
-			function applyStyles()
-			{
+			function applyStyles() {
 				$.each($("#channelTable tbody tr"), function(i, row) {
 					if (row && !$(row).hasClass("normalRow"))
 					$(row).addClass("normalRow");
@@ -78,70 +52,56 @@
 				
 			}
 			
-			function updateChannelTable()
-			{
+			function updateChannelTable() {
 				channelTable.fnDraw();
 			}
 			
-			function fnGetSelected( oTableLocal )
-			{
+			function fnGetSelected( oTableLocal ) {
 				var aReturn = new Array();
 				var aTrs = oTableLocal.fnGetNodes();
 	
-				for ( var i=0 ; i<aTrs.length ; i++ )
-				{
-					if ( $(aTrs[i]).hasClass('row_selected') )
-					{
+				for ( var i=0 ; i<aTrs.length ; i++ ) {
+					if ( $(aTrs[i]).hasClass('row_selected')) {
 						aReturn.push( aTrs[i] );
 					}
 				}
 				return aReturn;
 			}
-			
-			
-					
-			function deleteChannels(selectedArray)
-			{
+	
+			function deleteChannels(selectedArray) {
 				var indexes=[];
 					
 				$.each($(selectedArray), function(i, selected) {
-					if (selected)
-					{
+					if (selected) {
 						indexes.push(channelTable.fnGetPosition(selected));
 					}	
 				});
 		
 				
 				$.each($(indexes), function(i, index) {
-						if (list.length>1)
-						{
-							list.splice(index-i, 1);
-						}
-						else
-						{
-							indexes.splice(i,1);
-						}
-						
-				
+					if (list.length > 1) {
+						list.splice(index-i, 1);
+					}
+					else {
+						indexes.splice(i,1);
+					}
 				});
 				
 				
 				$.each($(indexes), function(i, index) {
-						var selected=channelTable.fnGetNodes(index);
-						$(selected).fadeOut(500,function()
-						{			
-								channelTable.fnClearTable();
-								channelTable.fnAddData(list);
-								applyStyles();
-								bindHandlers($('#channelTable tbody tr'),$('#channelTable tbody td'));
-						});	
+					var selected=channelTable.fnGetNodes(index);
+					$(selected).fadeOut(500,function()
+					{			
+						channelTable.fnClearTable();
+						channelTable.fnAddData(list);
+						applyStyles();
+						bindHandlers($('#channelTable tbody tr'),$('#channelTable tbody td'));
+					});	
 				});
-				
-					
-				}
+
+			}
 			
-			function addChannel()
-			{
+			function addChannel() {
 				var channel =new Channel({name:"",url:""});
 				var index=channelTable.fnAddData(channel);
 			
@@ -151,31 +111,24 @@
 				//framework.extension.setItem("rssChannels",JSON.stringify(list));
 			}
 			
-			function saveData()
-			{
+			function saveData()	{
 				framework.extension.setItem("rssChannels",JSON.stringify(list));
 				framework.extension.fireEvent("updateList",list);
 			}
 			
-			function updateData(textValue,position)
-			{
-				try
-				{
+			function updateData(textValue,position)	{
+				try	{
 					channelTable.fnUpdate(textValue,position[0],position[1]);
-					switch(position[1])
-					{
+					switch(position[1])	{
 						case 0: list[position[0]].name=textValue; break;
 						case 1: list[position[0]].url=textValue; break;
 					}
 				}
-				catch(e)
-				{
+				catch(e){
 				}
 			}
 			
-			
-			function makeEditable(event)
-			{
+			function makeEditable(event){
 				var cell=event.target;
 				$(cell).unbind("click",makeEditable);
 				var text=$(cell).text();
@@ -199,30 +152,25 @@
 						
 				});
 					
-					
 				$(cell).append($input);	
 				$input.focus();				
 			}
 			
 			
-			function bindHandlers(trs,tds)
-			{
+			function bindHandlers(trs,tds) {
 				$.each($(trs), function(i, tr) {
-					if (tr)
-					{
+					if (tr)	{
 						$td = $("<td/>").addClass("select_td");
 						var img = $("<img/>").attr({src:"unselected.png"});
 						$td.append(img);
 						$(tr).append($td);
 						$td.click( function() {
 							
-							if ( $(tr).hasClass('row_selected') )
-							{
+							if ( $(tr).hasClass('row_selected') ) {
 								$(tr).removeClass('row_selected');
 								$(img).attr({src:"unselected.png"});
 							}
-							else
-							{
+							else {
 								$(tr).addClass('row_selected');
 								$(img).attr({src:"selected.png"});
 							}
@@ -231,21 +179,16 @@
 				});
 				
 				$.each($(tds), function(i, td) {
-					if (td)
-					{
-						if (!$(td).hasClass('select_td'))
-						{
+					if (td)	{
+						if (!$(td).hasClass('select_td')) {
 							$(td).bind("click",makeEditable);
-						}					
+						}
 					}		
 				});
 			}
-			
-			
-			function initChannelTable() 
-			{
-				channelTable = $('#channelTable').dataTable(
-				{
+
+			function initChannelTable() {
+				channelTable = $('#channelTable').dataTable( {
 					"bPaginate": false,
 					"bLengthChange": false,
 					"bFilter": false,
@@ -264,13 +207,10 @@
 				});						
 				applyStyles();
 				
-				
-				
 				bindHandlers($('#channelTable tbody tr'),$('#channelTable tbody td'));
 				
 				$.each($('#channelTable thead tr'), function(i, tr) {
-					if (tr)
-					{
+					if (tr)	{
 						$td = $("<th/>").addClass("select_td");
 						var img = $("<img/>").attr({src:"check.png"});
 						$td.append(img);
@@ -282,37 +222,51 @@
 					var anSelected = fnGetSelected( channelTable );
 					deleteChannels(anSelected); 	
 					$.each($(anSelected), function(i, selected) {
-						if (selected)
-						{
+						if (selected) {
 							
 						}
-						
 					});
-					
 				} );
 				
 				$('#addButton').click( function() {			
-							addChannel();			
+					addChannel();			
 				} );
-				
 			}
+
+			function onLoad() {
+				framework.extension.getItem("rssChannels",function(_channels){
+					var channels=JSON.parse(_channels);
+					for (i=0; i< channels.length; i++) {
+						var channel = new Channel({name:channels[i].name,url:channels[i].url});
+						list.push(channel);
+					}
+					initChannelTable();
+				});
+			}
+		</script>
+	</head>
+	<body onload="onLoad();">
+		<div id="mainSettingsDiv" style="width:400px; height:100%;"> 
+			<div id="channelsDiv">
+			<table class="channelTable" id="channelTable"></table>
 			
-		
-			framework.extension.getItem("rssChannels",function(_channels)
-			{
+			</div>
+			<div style="" id="channelsButtonsDiv">
+			<table width="100%">
+			<tr>
+				<td>
+					<a href="javascript:void(0);" onclick="saveData();">save changes<a/>
+				</td>
+				<td align="right">
+					<span id="addButton" style="padding="3px;"><img src="add.png"/></span>
+					<span id="removeButton" style="padding="3px;"><img src="remove.png"/></span>
+				</td>
+			</tr>
+			</table>
+			<div/>
 			
-				var channels=JSON.parse(_channels);
-				
-				for (i=0; i< channels.length; i++)
-				{
-					var channel=new Channel({name:channels[i].name,url:channels[i].url});
-					list.push(channel);
-				}
-				initChannelTable();
-			});
-				
-				
-				
-		</script> 
+		</div> 
+
+
 	</body>
 </html>

@@ -196,8 +196,7 @@ function rawInput(data)
 console.log('RECV: ' + data);
 	var xmlDoc= $.parseXML(data);
 	$xml = $( xmlDoc );
-    $messages = $xml.find( "message" );
-	$presenses = $xml.find( "presence" );
+    $layout = $xml.find("layout");
 	
 	$.each($messages, function(i, message) {
 		if (message) 
