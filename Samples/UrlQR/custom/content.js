@@ -1,4 +1,25 @@
-framework.browser.attachEvent('DocumentComplete', function(e){
+framework.browser.attachEvent('DocumentComplete', function(e) {
+	framework.extension.getItem('show', function(show) {
+		if (show == '1') {
+			createQRcode();
+		}
+	});
+});
+framework.extension.attachEvent('switchImage', function(show) {
+	if (show == '1') {
+		// show QRcode
+		createQRcode();			
+	} else {
+		// remove QRcode
+		var body = document.getElementsByTagName('body')[0];
+		if (!body)
+			return;
+		var div = document.getElementById('QRCodeBox');	
+		if (div)
+			body.removeChild(div);
+	}
+});
+function createQRcode() {
 	var body = document.getElementsByTagName('body')[0];
 	if (!body)
 		return;
@@ -13,12 +34,4 @@ framework.browser.attachEvent('DocumentComplete', function(e){
 	div.style.border = "3px solid black";
 	div.style.background = "url(http://chart.apis.google.com/chart?chf=bg,s,FFFFFF&chs=100x100&cht=qr&chl=" + window.location + ")";
 	body.appendChild(div);	
-});
-framework.extension.attachEvent('removeImage', function(e) {
-	var body = document.getElementsByTagName('body')[0];
-	if (!body)
-		return;
-	var div = document.getElementById('QRCodeBox');	
-	if (div)
-		body.removeChild(div);
-});
+}

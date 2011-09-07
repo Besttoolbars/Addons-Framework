@@ -9,11 +9,11 @@
 	
 	<interface name="framework" />
 	<browser>
-		<chrome		output=".\" />
-		<opera		output=".\" />
-		<ie			output=".\" />
-		<safari		output=".\" />
-		<firefox	output=".\" />
+		<chrome		output="out\" />
+		<opera		output="out\" />
+		<ie			output="out\" />
+		<safari		output="out\" />
+		<firefox	output="out\" />
 
 	</browser>
 	<content>
