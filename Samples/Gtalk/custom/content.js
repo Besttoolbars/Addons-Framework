@@ -19,7 +19,7 @@ framework.browser.attachEvent("DocumentComplete",function(data){
 });
 
 framework.extension.attachEvent('refreshBubble',function(data) {  
-	if (window.top!==window)return;
+	if (window.top!=window)return;
 	
 	var checkGtalkElement=document.getElementById("ci_ext_gtalkDiv");
 	if (!checkGtalkElement) openBubble(data);
@@ -29,14 +29,14 @@ framework.extension.attachEvent('refreshBubble',function(data) {
 
 
 framework.extension.attachEvent('showBubble',function(data) {  
-	if (window.top!==window)return;
+	if (window.top!=window)return;
 	openBubble(data);
 	
 	
  });
  
  framework.extension.attachEvent('closeBubble',function(data) {  
-	if (window.top!==window)return;
+	if (window.top!=window)return;
 	
 	var checkGtalkElement=document.getElementById("ci_ext_gtalkDiv");
 	if (checkGtalkElement) 
@@ -63,7 +63,7 @@ function openBubble(data)
 {
 
 framework.extension.fireEvent('getBaseUrl', {}, function(url){
-	if (window.top!==window) return;
+	if (window.top!=window) return;
 	baseUrl=url;
 	var checkGtalkElement=document.getElementById("ci_ext_gtalkDiv");
 	if (checkGtalkElement) return;
@@ -464,25 +464,25 @@ framework.extension.fireEvent('getBaseUrl', {}, function(url){
 }
 
 function onChatMessage(res,callback){
-		if (window.top!==window)return;
+		if (window.top!=window)return;
 		appendMessageToChat(res.jid,res.message);
 	}
 
 
 function onSendChatMessage(res,callback){
-		if (window.top!==window)return;
+		if (window.top!=window)return;
 		appendMessageToChat("me",res.message);
 		$('#ci_ext_chatMessageTextarea').get(0).value="";
 	}
 
 
 function onOpenChatWindow(res,callback){
-		if (window.top!==window)return;
+		if (window.top!=window)return;
 		initChatWindow(res);
 }
 
 function onCloseChatWindow(res,callback){
-	if (window.top!==window)return;
+	if (window.top!=window)return;
 	$('#ci_ext_chatDiv').fadeOut(500,function(){
 		$waitLoginDiv.fadeIn(500);
 		framework.extension.fireEvent('connectRequest', {}, function(res){});	
@@ -491,7 +491,7 @@ function onCloseChatWindow(res,callback){
 
 
 function onConnectStarted(res,callback){
-		if (window.top!==window) return;
+		if (window.top!=window) return;
 		$loginDiv.fadeOut(500, function() {
 			if ($('#ci_ext_friendBigDiv').is(":visible") || res.status.state=="connected") return;
 			$waitLoginDiv.fadeIn(500);
@@ -499,7 +499,7 @@ function onConnectStarted(res,callback){
 }
 
 function onDisconnectStarted(res,callback){
-		if (window.top!==window)return;
+		if (window.top!=window)return;
 		$('#ci_ext_friendBigDiv').fadeOut(500, function() {
 			framework.extension.fireEvent('getStatus', {}, function(status){
 				if ($loginDiv.is(":visible") || status.state=="notConnected") return;
@@ -511,7 +511,7 @@ function onDisconnectStarted(res,callback){
 
 
 function onConnect(res,callback){
-		if (window.top!==window)return;
+		if (window.top!=window)return;
 		friendList=res.friendList;
 		var hiddableElement;
 	
@@ -548,7 +548,7 @@ function onPresence(res,callback)
 }
 
 function onDisconnect(res,callback){
-	if (window.top!==window)return;
+	if (window.top!=window)return;
 	
 	var hiddableElement;
 	
@@ -569,7 +569,7 @@ function onDisconnect(res,callback){
 
 function onConnectRequest(res,callback)
 {
-	if (window.top!==window)return;
+	if (window.top!=window)return;
 	if (res.status.state=="connected")
 	{	
 		friendList=res.friendList;
