@@ -6,8 +6,10 @@ var iDelay = 60, //-- delay in seconds
 function init() {
 	startRequest();
 	framework.ui.button.setBadgeBackgroundColor('#cc3c29');
-	framework.ui.button.attachEvent('ButtonClick', function () {
-		goToInbox();
+	framework.ui.button.attachEvent('ButtonClick', function() {
+		setTimeout(function() {
+			goToInbox();
+		}, 1);
 	});
 }
 
@@ -18,7 +20,6 @@ function scheduleRequest() {
 
 function startRequest() {
 	getInboxCount( function(count) {
-			console.log(count);
 			updateUnreadCount(count);
 			scheduleRequest();
 		},function() {
@@ -29,7 +30,7 @@ function startRequest() {
 }
 
 function getInboxCount(onSuccess, onError) {
-	var xhr = new XMLHttpRequest(),
+	var xhr = framework.extension.getRequest(),
 	abortTimerId = window.setTimeout(function() {
 		xhr.abort();  // synchronously calls onreadystatechange
 	}, iRequestTimeout);
@@ -48,7 +49,6 @@ function getInboxCount(onSuccess, onError) {
 	}
 
 	xhr.onreadystatechange = function(){
-		console.log(xhr);
 		if (xhr.readyState != 4)
 			return;
 		if (xhr.status == 404){
@@ -66,8 +66,10 @@ function getInboxCount(onSuccess, onError) {
 		handleError();
 	}
 
-	xhr.onerror = function(error) {
-		handleError();
+	if ('undefined' !== typeof (xhr.onerror)) {
+		xhr.onerror = function(error) {
+			handleError();
+		}
 	}
 	xhr.open('GET', 'https://plus.google.com/u/0/_/notifications/frame', true);
 	xhr.send(null);
@@ -86,7 +88,8 @@ function showLoggedOut() {
 
 function goToInbox() {
 	framework.browser.navigate({
-		'url': 'https://plus.google.com/'
+		'url': 'https://plus.google.com/',
+		tabId: null
 	});
 }
 
