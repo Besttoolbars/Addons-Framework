@@ -193,7 +193,7 @@ function disconnectGtalk()
 function rawInput(data)
 {
 
-console.log('RECV: ' + data);
+//console.log('RECV: ' + data);
 	var xmlDoc= $.parseXML(data);
 	$xml = $( xmlDoc );
     $messages = $xml.find( "message" );
@@ -269,14 +269,14 @@ function rawOutput(data)
 
 function onConnect(status,callback)
 {
+
     if (status == Strophe.Status.CONNECTING) {
-	//log('Strophe is connecting.');
+	
     } else if (status == Strophe.Status.CONNFAIL) {
 		gtalkStatus.state="notConnected";
-		softomate.extension.fireEvent('onConnect', {status : gtalkStatus, friendList : friendList}, function(){});    
+		framework.extension.fireEvent('onConnect', {status : gtalkStatus, friendList : friendList}, function(){});    
 	} 
 	else if (status == Strophe.Status.AUTHFAIL) {
-	console.log("aurh")
 		connectionCallback=function()
 		{ 
 			gtalkStatus.state="notConnected";
@@ -284,18 +284,14 @@ function onConnect(status,callback)
 		}
 		disconnectGtalk();		 
 	} else if (status == Strophe.Status.DISCONNECTING) {
-	//log('Strophe is disconnecting.');
+		//log('Strophe is disconnecting.');
     } else if (status == Strophe.Status.DISCONNECTED) {
 		callback();
     } else if (status == Strophe.Status.CONNECTED) {
-//	log('Strophe is connected.');
-	//sendPresence("default","");
-	
-	getRoster(callback);
-	
-
-	//connection.disconnect();
-	
+		//	log('Strophe is connected.');
+		//sendPresence("default","");
+		getRoster(callback);
+		//connection.disconnect();
 	}
 }
 
