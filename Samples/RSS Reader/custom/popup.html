@@ -1,8 +1,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="css/jquery.ui.all.css"> 
-		<link rel="stylesheet" href="css/additional.css">
-		<script type="text/javascript" src="popup.js"></script>
+		<link rel="stylesheet" href="css/additional.css"> 
 		<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
 		<script type="text/javascript" src="jquery-ui-1.8.15.custom.min.js"></script>
 	
@@ -12,13 +11,17 @@
 			var channelTabsCounter=0;
 			var rssChannels;
 			
-			function initChannelTabs() {
-				framework.extension.getItem("rssChannels", function(data) {
+			function initChannelTabs()
+			{
+				
+				framework.extension.getItem("rssChannels", function(data)
+				{
 					if ($channelTabs) $channelTabs.tabs( 'destroy' );
-					if (!data)
-						return;
+					if (!data) return;
 					rssChannels = JSON.parse(data);
 				
+					
+					
 					$channelTabs=$( "#channelTabs" ).tabs({
 					add: function( event, ui ) {
 							var tab_content = getTabContentByIndex(ui.index);
@@ -27,34 +30,45 @@
 					});
 					
 					$.each($(rssChannels), function(i, rssChannel) {
-						if (rssChannel)	{
+						if (rssChannel)
+						{
 							$channelTabs.tabs( "add", "#tabs-" + channelTabsCounter, rssChannel.name );
 							channelTabsCounter++;
 						}		
 					});
 				});
 			//		$channelTabs.tabs( 'destroy' );
+					
+			
+			
 			}
 			
-			function createTable() {
+			
+			function createTable()
+			{
 				var $table = $("<table/>");
 				$table.append($("<tbody/>"));
 				return $table;
 			}
 				
-			function addRow($table)	{
+			function addRow($table)
+			{
 				var $tr=$("<tr/>");
 				$table.children("tbody").append($tr);
 				return $tr;
 			}
 			
-			function addCell($tr) {
+			function addCell($tr)
+			{
 				var $td=$("<td/>");
 				$tr.append($td);
 				return $td;
 			}
 			
-			function generateLayout(index) {				
+			
+			function generateLayout(index)
+			{
+				
 				var $mainDiv=$("<div/>");
 				$mainDiv.css({
 					"width":"100%"
@@ -111,20 +125,25 @@
 					"align" : "right"
 				});
 				
+				
 				var $prevButtonImg= $("<img/>").attr({"src":"prev.png"});
 				var $nextButtonImg= $("<img/>").attr({"src":"next.png"});
+				
 				var i=0;
 				
-				$prevButtonImg.bind("click",function() {
+				$prevButtonImg.bind("click",function()
+				{
 					var content=getContentByIndex(index);
-					if (content)  {
+					if (content) 
+					{
 						if (i>0) i--; else return;
 						$contentTable.hide("slide", { direction: "right" }, 100);
 						$innerContentDiv.html(content.items[i].description);
 						$titleCell.html(content.items[i].title);
 						
 						$titleCell.unbind();
-						$titleCell.bind("click",function() {
+						$titleCell.bind("click",function()
+						{
 							framework.browser.navigate({url: content.items[i].link, tabId: null});
 						});		
 						
@@ -132,22 +151,26 @@
 					}
 				});
 				
-				$nextButtonImg.bind("click",function() {
+				$nextButtonImg.bind("click",function()
+				{
 					var content=getContentByIndex(index);
-					if (content) {
+					if (content) 
+					{
 						if (i!=content.items.length-1) i++; else return;
 						$contentTable.hide("slide", { direction: "left" }, 100);
 						$innerContentDiv.html(content.items[i].description);
 						$titleCell.html(content.items[i].title);
 						
 						$titleCell.unbind();
-						$titleCell.bind("click",function() {
+						$titleCell.bind("click",function()
+						{
 							framework.browser.navigate({url: content.items[i].link, tabId: null});
 						});
 						
 						$contentTable.show("slide", { direction: "right" }, 100);
 					}
 				});
+				
 				
 				$prevButtonCell.append($prevButtonImg);
 				$nextButtonCell.append($nextButtonImg);
@@ -156,41 +179,63 @@
 				$mainDiv.append($buttonTable);
 				
 				var content=getContentByIndex(index);
-				if (content) {
-					if (content.items.length>0) {
+				if (content) 
+				{
+					if (content.items.length>0)
+					{
 						$innerContentDiv.html(content.items[i].description);
 						$titleCell.html(content.items[i].title);
 						$titleCell.unbind();
 						
-						$titleCell.bind("click",function() {
-							safari.extension.globalPage.contentWindow.console.log(framework.browser.navigate);
+						$titleCell.bind("click",function()
+						{
+						safari.extension.globalPage.contentWindow.console.log(framework.browser.navigate);
 							framework.browser.navigate({url: content.items[i].link, newtab: true});
 						});		
+						
 					}
 				}
+				
+				
 				return $mainDiv;
 			}
 			
-			function getTabContentByIndex(index) {
+			
+			function getTabContentByIndex(index)
+			{
+			
 				return generateLayout(index);
 			}
 			
-			function getContentByIndex(index) {
+			function getContentByIndex(index)
+			{
 				return rssChannels[index].data;
 			}
 			
-			function onLoad() {
+			
+			
+			function onLoad()
+			{
+				//initChannelTabs();
+				//framework.extension.detachEvent("updateContent",initChannelTabs);
+				//framework.extension.attachEvent("updateContent",initChannelTabs);
+			}
+			
+			$(document).ready(function()
+			{
 				initChannelTabs();
 				framework.extension.detachEvent("updateContent",initChannelTabs);
 				framework.extension.attachEvent("updateContent",initChannelTabs);
-			}
+			});
 					
 		</script>
 	</head>
-	<body onload="onLoad();" style="width:400px; height:300px">
+	<body onload="onLoad();">
 		<div id="channelTabs"> 
 			<ul> 
 			</ul>
-		</div>
+		</div> 
+		
+		
 	</body>
 </html>

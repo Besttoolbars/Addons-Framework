@@ -25,6 +25,7 @@ framework.extension.attachEvent("updateList",function(_list) {
 	requestInterval=setInterval(getChannelsData,requestTimeout);
 
 });
+
     
 function init() {
 	framework.extension.getItem("rssChannels", function(data) {

@@ -9,11 +9,11 @@
 	
 	<interface name="framework" />
 	<browser>
-		<chrome	output=".\out\" />
-		<opera output=".\out\" />
-		<ie output=".\out\" />
-		<safari output=".\out\" />
-		<firefox output=".\out\" />
+		<chrome		output=".\" />
+		<opera		output=".\" />
+		<ie			output=".\" />
+		<safari		output=".\" />
+		<firefox	output=".\" />
 	</browser>
 	<content>
 		<script src="content.js" />
@@ -26,7 +26,6 @@
 			<icon id="i32">
 				<all size="32" src="32x32.png" />
 				<ie size="32" src="addons_framework.ico" />
-				<safari size="18" src="18x18_bw.png" />
 			</icon>
 		</icons>
 		<button tooltip='Breaks page layout' iconId="i32" />

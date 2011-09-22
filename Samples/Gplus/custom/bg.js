@@ -1,93 +1,77 @@
 var iDelay = 60, //-- delay in seconds
 	iUnreadedCount = 0,
-	iRequestTimeout = 1000,
-	iRequestFailureCount = 0,
-	unreadCountUrl = "https://plus.google.com/u/0/_/notifications/getunreadcount?inWidget=true&rt=j";
-var DEBUG = false;
+	iRequestTimeout = 500,
+	iRequestFailureCount = 0;
 
-function log(str) {
-	if (DEBUG)
-		framework.extension.log(str);
-}
 function init() {
 	startRequest();
 	framework.ui.button.setBadgeBackgroundColor('#cc3c29');
-	framework.ui.button.attachEvent('ButtonClick', function () {
-		goToInbox();
+	framework.ui.button.attachEvent('ButtonClick', function() {
+		setTimeout(function() {
+			goToInbox();
+		}, 1);
 	});
 }
 
 function scheduleRequest() {
-	delay = iDelay * 1000;
+	delay = iDelay*1000;
 	window.setTimeout(startRequest, delay);
 }
 
 function startRequest() {
-	log('startRequest');
 	getInboxCount( function(count) {
-		log(count);
-		updateUnreadCount(count);
-		scheduleRequest();
-	},function() {
-		showLoggedOut();
-		scheduleRequest();
-	});
+			updateUnreadCount(count);
+			scheduleRequest();
+		},function() {
+			showLoggedOut();
+			scheduleRequest();
+		}
+	);
 }
 
 function getInboxCount(onSuccess, onError) {
-	log('getInboxCount');
-	var xhr = new XMLHttpRequest(),
+	var xhr = framework.extension.getRequest(),
 	abortTimerId = window.setTimeout(function() {
 		xhr.abort();  // synchronously calls onreadystatechange
 	}, iRequestTimeout);
 
 	function handleSuccess(count) {
-		log('handleSuccess');
 		iRequestFailureCount = 0;
 		window.clearTimeout(abortTimerId);
 		if (onSuccess)
 			onSuccess(count);
 	}
 	function handleError() {
-		log('handleError');
 		++iRequestFailureCount;
 		window.clearTimeout(abortTimerId);
 		if (onError)
 			onError();
 	}
 
-	xhr.onreadystatechange = function() {
-		log('onreadystatechange');
-		log(xhr);
+	xhr.onreadystatechange = function(){
 		if (xhr.readyState != 4)
 			return;
-		if (xhr.status == 404) {
+		if (xhr.status == 404){
 			handleError();
 			return;
 		}
-		if (xhr.status == 200 && xhr.responseText) {
-			var text = xhr.responseText;
-			log(text);
-			var firstComma = text.indexOf(',', 5);
-			var secondComma = text.indexOf(',', firstComma + 1);
-			var thridComma = text.indexOf(',', secondComma + 1);
-			var countStr = text.substring(firstComma + 1, secondComma);
-			var loginStatus = text.substring(secondComma + 1, thridComma);
-			if (loginStatus == '"LOGIN REQUIRED"') {
-				log(loginStatus);
-				handleError();
-			} else {
-				handleSuccess(countStr);
+		if (xhr.responseText) {
+			//var match = /['"]a-za-Tf['"],['"]300['"], ([0-9]+).0/i.exec(xhr.responseText);
+			var match = /['"],['"]300['"], ([0-9]+).0/i.exec(xhr.responseText);
+			if(null != match){
+				handleSuccess(match[1]);
 			}
 			return;
 		}
 		handleError();
 	}
 
-	xhr.onerror = function(error) {
-		handleError();
+	if ('undefined' !== typeof (xhr.onerror)) {
+		xhr.onerror = function(error) {
+			handleError();
+		}
 	}
-	xhr.open('GET', unreadCountUrl, true);
+	xhr.open('GET', 'https://plus.google.com/u/0/_/notifications/frame', true);
 	xhr.send(null);
 }
 
@@ -104,8 +88,10 @@ function showLoggedOut() {
 
 function goToInbox() {
 	framework.browser.navigate({
-		'url': 'https://plus.google.com/'
+		'url': 'https://plus.google.com/',
+		tabId: null
 	});
 }
+
 
 init();

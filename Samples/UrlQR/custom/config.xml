@@ -9,11 +9,11 @@
 	
 	<interface name="framework" />
 	<browser>
-		<chrome		output="out\" />
-		<opera		output="out\" />
-		<ie			output="out\" />
-		<safari		output="out\" />
-		<firefox	output="out\" />
+		<chrome		output=".\" />
+		<opera		output=".\" />
+		<ie			output=".\" />
+		<safari		output=".\" />
+		<firefox	output=".\" />
 
 	</browser>
 	<content>
@@ -27,7 +27,6 @@
 			<icon id="x1">
 				<all size="32" src="32x32.png" />
 				<ie size="32" src="addons_framework.ico" />
-				<safari size="18" src="18x18_bw.png" />
 			</icon>
 			<icon id="x2">
 				<all size="32" src="32x32.png" />
