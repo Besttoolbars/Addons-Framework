@@ -15,7 +15,7 @@
 		<safari		output=".\" />
 		<firefox	output=".\" />
 	</browser>
-	<content>
+	<content jquery="true">
 		<script src="jquery-ui-1.8.14.custom.js" />
 		<script src="content.js" />	
 	</content>
