@@ -24,6 +24,7 @@
 			<icon id="x1">
 				<all size="16" src="gplus_16.png" />
 				<ie size="32" src="addons_framework.ico" />
+				<safari size="18" src="gplus_18_bw.png" />
 			</icon>
 			<icon id="x2">
 				<all size="16" src="gplus_16.png" />
