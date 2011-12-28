@@ -34,6 +34,6 @@
 		<chrome 	url="http://sample.net/chrome/" />
 		<ie 		url="http://sample.net/ie/" />
 		<safari 	url="http://sample.net/safari/" />
-		<firefox	url="https:/sample.net/firefox/" />
+		<firefox	url="https://sample.net/firefox/" />
 	</update>
 </addon>
