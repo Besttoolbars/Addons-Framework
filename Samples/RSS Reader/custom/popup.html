@@ -1,241 +1,384 @@
-<html>
+﻿<html>
 	<head>
 		<link rel="stylesheet" href="css/jquery.ui.all.css"> 
 		<link rel="stylesheet" href="css/additional.css"> 
-		<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
+		<style>
+		
+			html, body {
+			/*height:100%;*/
+			width: 100%;
+			padding: 0px;
+			margin:0px;
+			}
+			
+			#channelTabs {
+				padding : 0;
+				/*height:100%;*/
+			}
+			
+			.mainNewsDiv 
+			{
+				/*height:100%;*/
+				width:100%;
+			}
+			
+			.contentNewsDiv
+			{
+				width:100%;
+				/*height:100%;*/
+				overflow:auto;
+			}	
+			
+			.contentNewsTable 
+			{
+				/*height : 100%;*/
+				width : 100%;
+			}
+			
+			.titleNewsRow
+			{
+				height : 50px;
+				width" : 100%;
+			}
+			
+			.titleNewsCell 
+			{
+				font : bold normal 10pt arial;
+			}
+			
+			.contentNewsRow 
+			{
+				/*height : 80%;*/
+				width : 100%;
+			}
+			
+			.contentNewsCell 
+			{
+				width : 100%;
+				vertical-align: top;
+			}
+					
+			.innerContentNewsDiv
+			{
+				width : 100%;
+                overflow: auto;
+			}
+				
+			.buttonNewsTable 
+			{
+				width : 100%;
+				/*height : 32px;*/
+			}
+					
+			.nextButtonNewsCell
+			{
+				text-align : right;
+			}
+		</style>
+		<script type="text/javascript" src="popup.js"></script>
+		<script type="text/javascript" src="jquery-1.5.1.min.js"></script>
 		<script type="text/javascript" src="jquery-ui-1.8.15.custom.min.js"></script>
-	
+		<script type="text/javascript" src="TableConstructor.js"></script>
+		
 		<script>
 			
 			var $channelTabs;
-			var channelTabsCounter=0;
-			var rssChannels;
+
+            var widthValue = 500,
+                heightValue = 300;
 			
-			function initChannelTabs()
+			function DataManager(data)
 			{
+				var self = this;
+				//var rssChannels=data;
+				var rssChannels=JSON.parse(data);
 				
-				framework.extension.getItem("rssChannels", function(data)
+				this.getContentByIndex = function(index)
 				{
-					if ($channelTabs) $channelTabs.tabs( 'destroy' );
-					if (!data) return;
-					rssChannels = JSON.parse(data);
+					return rssChannels[index].data;
+				}
 				
+				this.getRssChannels = function()
+				{
+					return rssChannels;
+				}
+			
+			}
+			
+			
+			
+			function ChannelTabs()
+			{
+			
+				var self=this;
+				var tableConstructor = new TableConstructor();
+				var channelTabsCounter=0;
+				var rssChannels;
+				var dataManager;
+				
+				this.initChannelTabs = function (_dataManager)
+				{
+
+					dataManager=_dataManager;
+					if ($channelTabs) $channelTabs.tabs( 'destroy' );
 					
+									
+					rssChannels = dataManager.getRssChannels();
+				
+					if (!rssChannels) return;
 					
 					$channelTabs=$( "#channelTabs" ).tabs({
-					add: function( event, ui ) {
-							var tab_content = getTabContentByIndex(ui.index);
-							$( ui.panel ).append(tab_content);
-						}				
+						add: function( event, ui ) {
+								
+								var tab_content = getTabContentByIndex(ui.index);
+								
+                            ///////////////////////////////////////////////////////////////////////////////////////
+                            debugger;
+							//$( ui.panel ).height(heightValue);
+
+								console.log($(document).height()-$(".ui-tabs-nav").height());
+								
+							//$( ui.panel ).height($(document).height()-$(".ui-tabs-nav").height()-parseInt($( ui.panel ).css("padding-bottom")) - parseInt($( ui.panel ).css("padding-top"))-9);
+								$( ui.panel ).append(tab_content);
+							
+								
+							
+							}				
 					});
 					
 					$.each($(rssChannels), function(i, rssChannel) {
 						if (rssChannel)
 						{
-							$channelTabs.tabs( "add", "#tabs-" + channelTabsCounter, rssChannel.name );
+							var name = rssChannel.name=="" ? "Empty Name" : rssChannel.name;
+							$channelTabs.tabs( "add", "#tabs-" + channelTabsCounter, name );
 							channelTabsCounter++;
 						}		
 					});
-				});
-			//		$channelTabs.tabs( 'destroy' );
+				//		$channelTabs.tabs( 'destroy' );		
+				}
+			
+				function drawNewsTable()
+				{
+					var $table=tableConstructor.createTable();
+					$table.attr({
+						"cellspacing" : 0,
+						"cellpadding" :0
+					}).css({
+						//width : "100%",
+						//height: "100%"
+					});
+					var $tr = tableConstructor.addRow($table);
+					var $td = tableConstructor.addCell($tr);
+					var $mainDiv=$("<div/>");
+					$mainDiv.addClass("mainNewsDiv");
 					
-			
-			
-			}
-			
-			
-			function createTable()
-			{
-				var $table = $("<table/>");
-				$table.append($("<tbody/>"));
-				return $table;
-			}
+					var $contentDiv=$("<div>");
+					$contentDiv.addClass("contentNewsDiv");
+											
+					var $contentTable = tableConstructor.createTable();
+					$contentTable.addClass("contentNewsTable");
+					
+					var $titleRow = tableConstructor.addRow($contentTable);
+					$titleRow.addClass("titleNewsRow");
+					
+					var $titleCell = tableConstructor.addCell($titleRow);
+					$titleCell.addClass("titleNewsCell");
+					
+					var $contentRow = tableConstructor.addRow($contentTable);
+					$contentRow.addClass("contentNewsRow");
+					
+					var $contentCell = tableConstructor.addCell($contentRow);
+					$contentCell.addClass("contentNewsCell");
+					
+					$contentDiv.append($contentTable);
+					
+					$innerContentDiv=$("<div>");
+					$innerContentDiv.addClass("innerContentNewsDiv");
+					
+					$contentCell.append($innerContentDiv);
+					
+					var $buttonTable = tableConstructor.createTable();
+					$buttonTable.addClass("buttonNewsTable");
+					
+					var $buttonRow = tableConstructor.addRow($buttonTable);
+					var $prevButtonCell = tableConstructor.addCell($buttonRow);
+					var $nextButtonCell = tableConstructor.addCell($buttonRow);
+					
+					$nextButtonCell.addClass("nextButtonNewsCell");
 				
-			function addRow($table)
-			{
-				var $tr=$("<tr/>");
-				$table.children("tbody").append($tr);
-				return $tr;
-			}
-			
-			function addCell($tr)
-			{
-				var $td=$("<td/>");
-				$tr.append($td);
-				return $td;
-			}
-			
-			
-			function generateLayout(index)
-			{
-				
-				var $mainDiv=$("<div/>");
-				$mainDiv.css({
-					"width":"100%"
-					});	
-				
-				var $contentDiv=$("<div>");
-				$contentDiv.css({
-					"width":"100%",
-					"height":"180px",
-					"overflow":"auto"
-					});	
-								
-				var $contentTable = createTable();
-				$contentTable.css({
-						"height":"160px",
-						"width" : "100%"
-					});
-				var $titleRow = addRow($contentTable);
-				$titleRow.css({
-						"height":"20%",
-						"width" : "100%",
-					});
-				var $titleCell = addCell($titleRow);
-				$titleCell.css({
-						"font" : "bold normal 10pt arial"
-					});
-				var $contentRow= addRow($contentTable);
-				$contentRow.css({
-						"height":"80%",
-						"width" : "100%",
-					});
-				var $contentCell = addCell($contentRow);
-				$contentCell.css({
-						"width" : "100%"
-					}).attr({
-						"valign":"top"
-					});
-				$contentDiv.append($contentTable);
-				$innerContentDiv=$("<div>");
-				$innerContentDiv.css({
-					"width":"100%"
-					});	
-				$contentCell.append($innerContentDiv);
-				
-				var $buttonTable = createTable();
-				$buttonTable.css({
-					"width":"100%",
-					"height":"32px"
-					});	
-				var $buttonRow= addRow($buttonTable);
-				var $prevButtonCell = addCell($buttonRow);
-				var $nextButtonCell = addCell($buttonRow);
-				$nextButtonCell.attr({
-					"align" : "right"
-				});
-				
-				
-				var $prevButtonImg= $("<img/>").attr({"src":"prev.png"});
-				var $nextButtonImg= $("<img/>").attr({"src":"next.png"});
-				
-				var i=0;
-				
-				$prevButtonImg.bind("click",function()
-				{
-					var content=getContentByIndex(index);
-					if (content) 
-					{
-						if (i>0) i--; else return;
-						$contentTable.hide("slide", { direction: "right" }, 100);
-						$innerContentDiv.html(content.items[i].description);
-						$titleCell.html(content.items[i].title);
-						
-						$titleCell.unbind();
-						$titleCell.bind("click",function()
-						{
-							framework.browser.navigate({url: content.items[i].link, tabId: null});
-						});		
-						
-						$contentTable.show("slide", { direction: "left" }, 100);
-					}
-				});
-				
-				$nextButtonImg.bind("click",function()
-				{
-					var content=getContentByIndex(index);
-					if (content) 
-					{
-						if (i!=content.items.length-1) i++; else return;
-						$contentTable.hide("slide", { direction: "left" }, 100);
-						$innerContentDiv.html(content.items[i].description);
-						$titleCell.html(content.items[i].title);
-						
-						$titleCell.unbind();
-						$titleCell.bind("click",function()
-						{
-							framework.browser.navigate({url: content.items[i].link, tabId: null});
-						});
-						
-						$contentTable.show("slide", { direction: "right" }, 100);
-					}
-				});
-				
-				
-				$prevButtonCell.append($prevButtonImg);
-				$nextButtonCell.append($nextButtonImg);
+					var $prevButtonImg= $("<img/>").attr({"src":"prev.png"});
+					var $nextButtonImg= $("<img/>").attr({"src":"next.png"});
+					
+					$prevButtonCell.append($prevButtonImg);
+					$nextButtonCell.append($nextButtonImg);
 
-				$mainDiv.append($contentDiv);
-				$mainDiv.append($buttonTable);
+					$mainDiv.append($contentDiv);
+					$mainDiv.append($buttonTable);
+					$td.append($mainDiv);
+					//$td.append($buttonTable);
+						
+					//console.log($table);
+					var result = {
+						"mainContainer" : $table,
+						"contentTable" : $contentTable,
+						"prevButtonImg" : $prevButtonImg,
+						"nextButtonImg" : $nextButtonImg,
+						"titleContainer" : $titleCell,
+						"contentContainer" : $innerContentDiv
+					};
+					
+					
+					return result;
+				}
 				
-				var content=getContentByIndex(index);
-				if (content) 
+				// fill content of current News
+				// titleContainer - html element that contains title of News
+				// contentContainer -  html element that contains content of News
+				function fillContent(newsContainer,contentItem)
 				{
-					if (content.items.length>0)
+						$(newsContainer.contentContainer).html(contentItem.description);
+						$(newsContainer.titleContainer).html(contentItem.title);		
+				}
+				
+				// bind redirect event to news page
+				// object - item that catch click event
+				// url - url to redirect 
+				function bindNewsRedirect(object, url)
+				{
+					$(object).unbind();
+					$(object).bind("click",function()
 					{
-						$innerContentDiv.html(content.items[i].description);
-						$titleCell.html(content.items[i].title);
-						$titleCell.unbind();
-						
-						$titleCell.bind("click",function()
-						{
-						safari.extension.globalPage.contentWindow.console.log(framework.browser.navigate);
-							framework.browser.navigate({url: content.items[i].link, newtab: true});
-						});		
-						
-					}
+						softomate.browser.navigate({url: url, tabId: null});
+					});
 				}
 				
 				
-				return $mainDiv;
-			}
-			
-			
-			function getTabContentByIndex(index)
-			{
-			
-				return generateLayout(index);
-			}
-			
-			function getContentByIndex(index)
-			{
-				return rssChannels[index].data;
-			}
-			
+				// switch news
+				// directionHide - direction where hide News
+				// directionShow - direction where Show News 
+				function switchNews(newsContainer, contentItem, directionHide, directionShow, speed)
+				{
+					$(newsContainer.contentTable).hide("slide", { direction: directionHide }, speed);
+					fillContent(newsContainer,contentItem);
+					bindNewsRedirect(newsContainer.titleContainer,contentItem.link);
+					$(newsContainer.contentTable).show("slide", { direction: directionShow }, speed);
+				}
+				
+				function generateLayout(index)
+				{	
+					var newsContainer = drawNewsTable();
+					var i=0;		
+					$(newsContainer.prevButtonImg).bind("click",function()
+					{
+						var content=dataManager.getContentByIndex(index);
+						if (content) 
+						{
+							if (i>0) i--; else return;
+							switchNews(newsContainer,content.items[i],"right","left",100);						
+						}
+					});
+					
+					$(newsContainer.nextButtonImg).bind("click",function()
+					{
+						var content=dataManager.getContentByIndex(index);
+						if (content) 
+						{
+							if (i!=content.items.length-1) i++; else return;
+							switchNews(newsContainer,content.items[i],"left","right",100);
+						}
+					});
+												
+					var content=dataManager.getContentByIndex(index);
+					if (content) 
+					{
+						if (content.items.length>0)
+						{
+							fillContent(newsContainer,content.items[0]);
+							bindNewsRedirect(newsContainer.titleContainer,content.items[0].link);						
+						}
+					}
+		
+					return newsContainer.mainContainer;				
+				}
+		
+				function getTabContentByIndex(index)
+				{		
+					return generateLayout(index);
+				}
+	
+			}			
 			
 			
 			function onLoad()
 			{
 				//initChannelTabs();
-				//framework.extension.detachEvent("updateContent",initChannelTabs);
-				//framework.extension.attachEvent("updateContent",initChannelTabs);
+				//softomate.extension.detachEvent("updateContent",initChannelTabs);
+				//softomate.extension.attachEvent("updateContent",initChannelTabs);
 			}
 			
+			
+	
 			$(document).ready(function()
 			{
-				initChannelTabs();
-				framework.extension.detachEvent("updateContent",initChannelTabs);
-				framework.extension.attachEvent("updateContent",initChannelTabs);
+                    softomate.extension.getItem('popUpWidth', function (val) {
+                        if (!val) {
+                            softomate.extension.setItem('popUpWidth', widthValue);
+                        } else {
+                            widthValue = parseInt(val);
+                        }
+                    });
+                    
+                    softomate.extension.getItem('popUpHeight', function (val) {
+                        if (!val) {
+                            softomate.extension.setItem('popUpHeight', heightValue);
+                        } else {
+                            heightValue = parseInt(val);
+                        }
+                    });
+                    
+				//safari.extension.globalPage.contentWindow.console.log(document.documentElement.clientHeight);
+				var channelTabs= new ChannelTabs();
+				var dataManager;
+				
+				function initRssWidget()
+				{
+					softomate.extension.getItem("rssChannels", function(data)
+					{			
+						var channelTabs= new ChannelTabs();
+						dataManager = new DataManager(data);
+						channelTabs.initChannelTabs(dataManager);
+					});
+				}
+				
+				
+			softomate.extension.detachEvent("updateContent",initRssWidget);
+			softomate.extension.attachEvent("updateContent",initRssWidget);
+			initRssWidget();
+            
+            document.getElementById('channelTabs').style.width = widthValue + 'px';
+            $('.innerContentNewsDiv').css({
+						height: (heightValue - 100) + 'px'
+					});
+				
 			});
+			
+				
 					
 		</script>
 	</head>
-	<body onload="onLoad();">
-		<div id="channelTabs"> 
-			<ul> 
-			</ul>
-		</div> 
-		
+	<body>
+	<table cellspacing=0 cellpadding=0>
+		<tbody>
+			<tr>
+				<td>
+					<div id="channelTabs"> 
+						<ul> 
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</tbody>		
+	</table>
 		
 	</body>
 </html>

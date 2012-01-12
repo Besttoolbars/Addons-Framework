@@ -7,7 +7,7 @@
 	url="http://sample.net/"
 	author="Sample">
 	
-	<interface name="framework" />
+	<interface name="softomate" />
 	<browser>
 		<opera		output=".\" />
 		<firefox	output=".\" />
@@ -16,7 +16,7 @@
 		<chrome		output=".\" />
 		
 	</browser>
-	<content>
+	<content jquery="true">
 		<script src="content.js" />
 	</content>
 	<background>

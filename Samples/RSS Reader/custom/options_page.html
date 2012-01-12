@@ -1,318 +1,628 @@
 <html>
 	<head>
-		<script type="text/javascript" src="jquery.dataTables.min.js"></script>
-		<script type="text/javascript" src="jquery.dataTables.utils.js"></script>
-		<style>
-			.normalRow {background-color: #FFEBCD; border: 0px solid  #FF7722; height:20px; font: 80%/1.45em "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; color: #AA5303;}
-			.channelTable {border: 1px solid  #FF7722; border-collapse:collapse !important;}
-			.normalColumn {padding-left: 10px; border: 0px solid  #FF7722;}
-			
-			.headRow {background-color:  #FFE4C4; border: 1px solid  #FF7722; font: 80%/1.45em "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; color:  #DD7500;}
-			.headColumn { border: 1px solid  #FF7722; }
-			.row_selected {background-color: #FFD39B;}
-			.dataTables_empty
-			
-		</style>
-	</head>
-	<body>
-		<div id="mainSettingsDiv" style="width:400px; height:100%;"> 
-			<div id="channelsDiv">
-			<table class="channelTable" id="channelTable"></table>
-			
-			</div>
-			<div style="" id="channelsButtonsDiv">
-			<table width="100%">
-			<tr>
-				<td>
-					<a href="javascript:void(0);" onclick="saveData();">save changes<a/>
-				</td>
-				<td align="right">
-					<span id="addButton" style="padding="3px;"><img src="add.png"/></span>
-					<span id="removeButton" style="padding="3px;"><img src="remove.png"/></span>
-				</td>
-			</tr>
-			</table>
-			<div/>
-			
-		</div> 
-		
-		
-		
-			<script>		
-			var list=[];
-			var channelTable;
-			function Channel(data)
-			{
-				this.className = "Channel";
-				this.name=data.name;
-				this.url=data.url
-			}
+<script type="text/javascript" src="popup.js"></script>
 
-			Channel.prototype = {
-				toArray: function(){
-					return	[this.name, this.url];
-				}
-			}
-			
-			function applyStyles()
-			{
-				$.each($("#channelTable tbody tr"), function(i, row) {
-					if (row && !$(row).hasClass("normalRow"))
-					$(row).addClass("normalRow");
-				});
-				
-				$.each($("#channelTable tbody td"), function(i, column) {
-					if (column && !$(column).hasClass("normalColumn"))
-					$(column).addClass("normalColumn");
-				});
-				
-				$.each($("#channelTable thead tr"), function(i, row) {
-					if (row && !$(row).hasClass("headRow"))
-					$(row).addClass("headRow");
-				});
-				
-				$.each($("#channelTable thead th"), function(i, column) {
-					if (column && !$(column).hasClass("headColumn"))
-					$(column).addClass("headColumn");
-				});
-				
-			}
-			
-			function updateChannelTable()
-			{
-				channelTable.fnDraw();
-			}
-			
-			function fnGetSelected( oTableLocal )
-			{
-				var aReturn = new Array();
-				var aTrs = oTableLocal.fnGetNodes();
-	
-				for ( var i=0 ; i<aTrs.length ; i++ )
-				{
-					if ( $(aTrs[i]).hasClass('row_selected') )
-					{
-						aReturn.push( aTrs[i] );
-					}
-				}
-				return aReturn;
-			}
-			
-			
-					
-			function deleteChannels(selectedArray)
-			{
-				var indexes=[];
-					
-				$.each($(selectedArray), function(i, selected) {
-					if (selected)
-					{
-						indexes.push(channelTable.fnGetPosition(selected));
-					}	
-				});
+		<link rel="stylesheet" href="css/jquery.ui.all.css">
+		<script type="text/javascript" src="ci.content.pack.js"></script>
+        <script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+		<script type="text/javascript" src="jquery-ui-1.8.15.custom.min.js"></script>
+		<script type="text/javascript" src="TableConstructor.js"></script>
+		<style>
 		
+		html, body {
+			height: 100%;
+			width: 100%;
+			padding: 0px;
+			margin:0px;
+			font-size: 10px;
+		}
+		
+		.configTable {
+			border-spacing: 0px;
+			border-collapse: collapse;
+			padding: 0px;
+			margin-top: 10px;
+			width:100%;
+		}
+		
+		.nameTd{
+			width: 300px;
+		}
+		
+		.urlTd{
+			width: 300px;
+		}
+		
+		
+		.configTableHeader{
 				
-				$.each($(indexes), function(i, index) {
-						if (list.length>1)
-						{
-							list.splice(index-i, 1);
-						}
-						else
-						{
-							indexes.splice(i,1);
-						}
-						
+		}
+		
+		.configTableBody{
 				
-				});
+		}
+		
+		.configButtonTable
+		{
+			margin-top: 5px;
+			border-collapse: collapse;
+			padding: 0px;
+			width:100%;
+		}
+		
+		.configButtonTdAction
+		{
+			text-align: right;
+			padding:0px;
+		}
+		
+		.configButtonTdSave
+		{
+			text-align: left;
+			padding:0px;
+		}
+		
+		.configTableTr {
+
+		}
+		
+		.configTableTd {
+			margin-top:5px;
+			height: 25px;
+		}
+		
+		.configTableTh {
+			height: 30px;
+		}
+		
+		.configTableHeaderTr {
+			height: 30px;
+		}
+		
+		.addChannelButton{
+			height:25px;
+			width:70px;
+			font-size: 12px;
+			padding: 0px;
+			margin: 2px;
+		}
+		
+		.deleteChannelButton{
+			height:25px;
+			width:70px;
+			font-size: 12px;
+			padding: 0px;
+			margin: 2px;
+		}
+		
+		.saveConfigButton{
+			height:25px;
+			width:150px;
+			font-size: 12px;
+			padding: 0px;
+			margin: 2px;
+		}
+		
+		.actionsTh{
+			width: 60px;
+		}
+		
+		.actionsTd{
+			text-align : center;
+		}
 				
-				
-				$.each($(indexes), function(i, index) {
-						var selected=channelTable.fnGetNodes(index);
-						$(selected).fadeOut(500,function()
-						{			
-								channelTable.fnClearTable();
-								channelTable.fnAddData(list);
-								applyStyles();
-								bindHandlers($('#channelTable tbody tr'),$('#channelTable tbody td'));
-						});	
-				});
-				
-					
-				}
-			
-			function addChannel()
+		.actionTrashButton{
+			width:15px !important;
+			height:15px;
+		}
+		
+		.actionEditButton{
+			width:15px !important;
+			height:15px;
+		}
+		
+		label, input { display:block; }
+		input.text { margin-bottom:12px; width:95%; padding: .4em; }
+		fieldset { padding:0; border:0; margin-top:25px; }
+		h1 { font-size: 1.2em; margin: .6em 0; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; padding: 0.3em; }
+        
+        .slider {
+            font-size: 10px;
+            width: 100px;
+            display: inline-block;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+		
+		</style>
+		<script>
+		
+	
+			function ConfigTable(element)
 			{
-				var channel =new Channel({name:"",url:""});
-				var index=channelTable.fnAddData(channel);
-			
-				bindHandlers($(channelTable.fnGetNodes()[index]),$(channelTable.fnGetNodes()[index]).children());
-				applyStyles();
-				list.push(channel);
-				//framework.extension.setItem("rssChannels",JSON.stringify(list));
-			}
-			
-			function saveData()
-			{
-				framework.extension.setItem("rssChannels",JSON.stringify(list));
-				framework.extension.fireEvent("updateList",list);
-			}
-			
-			function updateData(textValue,position)
-			{
-				try
+				var self= this;
+				var data;
+				var widgetElement=element;
+				var tableConstructor;
+				var $table;
+				var $buttonTable;
+				var $channelDialog;
+				var saveDataCallback;
+				
+				this.initTable = function(_data,_saveDataCallback)
 				{
-					channelTable.fnUpdate(textValue,position[0],position[1]);
-					switch(position[1])
-					{
-						case 0: list[position[0]].name=textValue; break;
-						case 1: list[position[0]].url=textValue; break;
-					}
+					data=_data;
+					saveDataCallback=_saveDataCallback;
+					tableConstructor = new TableConstructor();
+					drawTable();
 				}
-				catch(e)
+				
+				function makeDialogButtons(saveButtonText,saveCallback)
 				{
-				}
-			}
-			
-			
-			function makeEditable(event)
-			{
-				var cell=event.target;
-				$(cell).unbind("click",makeEditable);
-				var text=$(cell).text();
-				$(cell).text("");
-				$input=$("<input>")
-					.attr({
-						type:"text",
-						width: "100%"
-					})
-					.val(text);
-				$input.focus();
-				$input.focusout( function(){
-					var textValue=$input.val();
-					$input.fadeOut(500,function(){
-						$(cell).text(textValue);
-						var position=channelTable.fnGetPosition(cell);
-						updateData(textValue,position);
-						//saveData();
-						$(cell).bind("click",makeEditable);
-					});
-						
-				});
-					
-					
-				$(cell).append($input);	
-				$input.focus();				
-			}
-			
-			
-			function bindHandlers(trs,tds)
-			{
-				$.each($(trs), function(i, tr) {
-					if (tr)
-					{
-						$td = $("<td/>").addClass("select_td");
-						var img = $("<img/>").attr({src:"unselected.png"});
-						$td.append(img);
-						$(tr).append($td);
-						$td.click( function() {
-							
-							if ( $(tr).hasClass('row_selected') )
+					$channelDialog.dialog({	
+						buttons: [
 							{
-								$(tr).removeClass('row_selected');
-								$(img).attr({src:"unselected.png"});
+								text: saveButtonText,
+								click: function() {
+									var contentItem={
+										"name":	$("#name").val(),
+										"url":	$("#url").val(), 
+									}						
+									saveCallback(contentItem);
+									$( this ).dialog( "close" );
+								}
+							},
+							{
+								text: "Cancel",
+								click: function() {
+									$( this ).dialog( "close" );
+								}
+							}
+						]
+					});
+				}
+				
+				function drawChannelDialog()
+				{
+					$channelDialog=$("<div/>").attr({
+						id:"dialog-form"
+					});	
+					$form=$("<form/>");
+					$fieldset=$("<fieldset/>");
+					
+					$labelName=$("<label/>").attr({
+						"for":"name"
+					}).text("Name");
+					
+					$inputName=$("<input/>").attr({
+						type: "text",
+						name: "name",
+						id : "name"
+					}).addClass("text ui-widget-content ui-corner-all");
+					
+					$labelUrl=$("<label/>").attr({
+						"for":"name"
+					}).text("Url");
+					
+					$inputUrl=$("<input/>").attr({
+						type: "text",
+						name: "url",
+						id : "url"
+					}).addClass("text ui-widget-content ui-corner-all");
+
+					$(document.body).append($channelDialog);
+					$channelDialog.append($form);
+					$form.append($fieldset);
+					$fieldset.append($labelName);
+					$fieldset.append($inputName);
+					$fieldset.append($labelUrl);
+					$fieldset.append($inputUrl);
+					
+					var name = $( "#name" );
+					var url = $( "#url" );
+					
+			
+					$( "#dialog:ui-dialog" ).dialog( "destroy" );
+					$( "#dialog-form" ).dialog({
+						autoOpen: false,
+						height: 300,
+						width: 350,
+						modal: true,
+						close: function() {
+						}
+					});
+				}
+				
+				function drawButtonTable()
+				{
+					if ($buttonTable) $buttonTable.remove();
+					$buttonTable = tableConstructor.createTable();
+					$buttonTable.addClass("configButtonTable");
+					var $buttonTr = tableConstructor.addRow($buttonTable);
+					var $saveButtonTd = tableConstructor.addCell($buttonTr);
+					var $actionButtonTd = tableConstructor.addCell($buttonTr);
+					$saveButtonTd.addClass("configButtonTdSave");
+					$actionButtonTd.addClass("configButtonTdAction");
+					
+					var $addButton = $("<a/>");
+					$addButton.text("Add");
+					$addButton.addClass("addChannelButton");
+					$addButton.button();
+					
+					var $deleteButton = $("<a/>");
+					$deleteButton.text("Delete");
+					$deleteButton.addClass("deleteChannelButton");
+					$deleteButton.button();
+					
+					var $saveButton = $("<a/>");
+					$saveButton.text("Save configurations");
+					$saveButton.addClass("saveConfigButton");
+					$saveButton.button();
+					
+					$(widgetElement).append($buttonTable);
+					$actionButtonTd.append($deleteButton);
+					$actionButtonTd.append($addButton);
+                    
+                    //////////////////////////////////////////////////////////////////////////////////////
+                    $('#saveButtonDiv').append($saveButton);
+                    
+                    $('.slider').slider();
+                    
+                    //$('#heightSlider').slider('option', 'value', softomate.extension.getItem('popUpHeight'));
+                    //$('#widthSlider').slider('option', 'value', softomate.extension.getItem('popUpWidth'));
+                    
+                    $('#widthSlider').slider('option', 'min', 200);
+                    $('#widthSlider').slider('option', 'max', 600);
+                    
+                    softomate.extension.getItem('popUpWidth', function (val) {
+                        var widthValue = 500;
+                        
+                        if (!val) {
+                            softomate.extension.setItem('popUpWidth', widthValue);
+                        } else {
+                            widthValue = parseInt(val);
+                        }
+                        
+                        $('#widthSlider').slider('option', 'value', widthValue);
+                        $('#widthValue').text(widthValue);
+                    });
+                    
+                    $('#widthSlider').bind('slide', function(event, ui) { $('#widthValue').text(ui.value); });
+                    
+                    $('#heightSlider').slider('option', 'min', 100);
+                    $('#heightSlider').slider('option', 'max', 500);
+                    
+                    softomate.extension.getItem('popUpHeight', function (val) {
+                        var heightValue = 300;
+                        
+                        if (!val) {
+                            softomate.extension.setItem('popUpHeight', heightValue);
+                        } else {
+                            heightValue = parseInt(val);
+                        }
+                        
+                        $('#heightSlider').slider('option', 'value', heightValue);
+                        $('#heightValue').text(heightValue);
+                    });
+                    
+                    $('#heightSlider').bind('slide', function(event, ui) { $('#heightValue').text(ui.value); });
+                    
+                    //debugger;
+				}
+				
+				function drawTable()
+				{
+					drawChannelDialog();
+					
+					function addRow(data)
+					{
+						var $itemTr = tableConstructor.addRow($table);
+						var $nameTd = tableConstructor.addCell($itemTr);
+						$nameTd.addClass("nameTd");
+						var $urlTd = tableConstructor.addCell($itemTr);
+						$urlTd.addClass("urlTd");
+						var $actionTd = tableConstructor.addCell($itemTr);
+						$actionTd.addClass("actionsTd");
+						var $trashButton=$("<button/>");
+						$trashButton.text("Delete channel");
+						$trashButton.addClass("actionTrashButton");
+						$trashButton.button({
+							icons: {
+								primary: "ui-icon-trash"
+							},
+							text: false
+						});
+						
+						var $editButton=$("<button/>");
+						$editButton.text("Edit channel");
+						$editButton.addClass("actionEditButton");
+						$editButton.button({
+							icons: {
+								primary: "ui-icon-pencil"
+							},
+							text: false
+						});
+						
+						$actionTd.append($editButton);
+						$actionTd.append($trashButton);
+						
+						$nameTd.text(data.name);
+						$urlTd.text(data.url);	
+						return 	$itemTr;				
+					}
+					
+					
+					function addChannel(_data)
+					{
+						data.push(_data);	
+						var $tr = addRow(_data);
+						applyTableStyles($tr);
+						bindTableEvents($tr);
+					}
+					
+					function saveChannel(_data,$tr)
+					{
+						var $body = tableConstructor.body($table);
+						$trs= $body.find("tr");
+						var index = $trs.index($tr);
+						data[index]=_data;
+						console.log(data[index]);
+						console.log($tr);
+						$tr.find(".nameTd").text(data[index].name);
+						$tr.find(".urlTd").text(data[index].url);
+					}
+					
+					function remove($tr)
+					{
+						var $body = tableConstructor.body($table);
+						$trs= $body.find("tr");
+						var index = $trs.index($tr);
+						data.splice(index,1);
+						$tr.remove();
+					}
+					
+					function removeSelected()
+					{
+						var $body = tableConstructor.body($table);
+						$trs= $body.find("tr");
+						$activeTrs=$trs.filter(".ui-state-active");
+		
+						
+						$.each($activeTrs, function(i, tr) { 
+							var index= $trs.index($(tr)); 
+							console.log(index);
+							data[index]=null;
+						});
+						
+						var i=0;
+						while(i<data.length)
+						{
+							if (data[i])
+							{							
+								i++;
 							}
 							else
 							{
-								$(tr).addClass('row_selected');
-								$(img).attr({src:"selected.png"});
+								data.splice(i,1);
 							}
-						} );					
-					}		
-				});
-				
-				$.each($(tds), function(i, td) {
-					if (td)
-					{
-						if (!$(td).hasClass('select_td'))
-						{
-							$(td).bind("click",makeEditable);
 						}					
-					}		
-				});
-			}
-			
-			
-			function initChannelTable() 
-			{
-				channelTable = $('#channelTable').dataTable(
-				{
-					"bPaginate": false,
-					"bLengthChange": false,
-					"bFilter": false,
-					"bSort": false,
-					"bInfo": false,
-					"bAutoWidth": false,
-					"bUseRendered": false,
-					"aaData": list,
-					"oLanguage": {
-						"sZeroRecords": ""
-					},
-					"aoColumns": [
-						{"sTitle": "name", "sWidth":"200px"},
-						{"sTitle": "url", "sWidth":"200px"}
-					]
-				});						
-				applyStyles();
-				
-				
-				
-				bindHandlers($('#channelTable tbody tr'),$('#channelTable tbody td'));
-				
-				$.each($('#channelTable thead tr'), function(i, tr) {
-					if (tr)
+						$activeTrs.remove();
+					}
+					
+					
+					function bindTableEvents(tr)
 					{
-						$td = $("<th/>").addClass("select_td");
-						var img = $("<img/>").attr({src:"check.png"});
-						$td.append(img);
-						$(tr).append($td);
-					}		
-				});
-				
-				$('#removeButton').click( function() {
-					var anSelected = fnGetSelected( channelTable );
-					deleteChannels(anSelected); 	
-					$.each($(anSelected), function(i, selected) {
-						if (selected)
+						var $body = tableConstructor.body($table);
+						var $trs;
+						if (tr)
 						{
-							
+							$trs = $(tr);
+						}
+						else
+						{
+							$trs = $body.find("tr");
 						}
 						
-					});
+						$trs.click(function()
+						{
+							if ($(this).hasClass("ui-state-active"))
+							{
+								$(this).removeClass("ui-state-active");								
+							}
+							else
+							{
+								var borderColor=$(this).css("border-left-color");
+								$(this).addClass("ui-state-active");
+								$(this).css("border-color",borderColor);
+							}					
+						});
+							
+						$trs.bind("mouseover",function()
+						{
+							var borderColor=$(this).css("border-left-color");
+							$(this).addClass("ui-state-hover");
+							$(this).css("border-color",borderColor);
+						});
+						
+						$trs.bind("mouseout",function()
+						{
+							$(this).removeClass("ui-state-hover");				
+						});
+						
+						$.each($trs, function(i, currentTr) { 
+							var $trashButtons=$(currentTr).find(".actionTrashButton");
+							var $editButtons=$(currentTr).find(".actionEditButton");
+							var $name=$(currentTr).find(".nameTd");
+							var $url=$(currentTr).find(".urlTd");
+
+							$trashButtons.click(function()
+							{
+								remove($(currentTr));	
+							});
+							
+							$editButtons.click(function()
+							{
+								$channelDialog.dialog({
+									title:"Edit channel"
+								});	
+								
+								makeDialogButtons("Save",function(data){
+									saveChannel(data,$(currentTr));
+								});
+							
+								
+								$( "#name" ).val($name.text());
+								$( "#url" ).val($url.text());
+						
+								$channelDialog.dialog("open");		
+							
+								return false;
+							});
+						});
+						
+					}
 					
-				} );
+					function bindButtonTableEvents()
+					{
+						$(".addChannelButton").click(function(){
+							$channelDialog.dialog({
+								title:"Add new channel"
+							});	
+							
+							makeDialogButtons("Add",function(data){
+								addChannel(data);
+							});
+							
+							$( "#name" ).val("");
+							$( "#url" ).val("");
+					
+							$channelDialog.dialog("open");
+						});
+						
+						$(".deleteChannelButton").click(function(){
+							removeSelected();
+						});
+						
+						$(".saveConfigButton").click(function(){
+							saveDataCallback(data);
+                            
+                        savePopUpSize();
+						});
+							
+					}
+					
+					function applyTableStyles(tr)
+					{
+						if (tr)
+						{
+							$(tr).addClass("ui-state-default").addClass("configTableTr");
+							$(tr).find("td").addClass("configTableTd");
+						}
+						else
+						{
+							var $body = tableConstructor.body($table);
+							//$body.addClass("configTableBody");
+							$body.find("td").addClass("configTableTd");
+							$body.find("tr").addClass("ui-state-default").addClass("configTableTr");
+							var $header = tableConstructor.header($table);
+							//$header.addClass("configTableHeader");
+							$header.find("tr").addClass("configTableHeaderTr").addClass("ui-widget-header");
+							$header.find("th").addClass("configTableTh").addClass("ui-widget-header");
+						}
+					}
+					
+					
+					$(widgetElement).empty();
+						
+					if ($table)
+					{
+						$table.remove();
+					}
+					
+					
+					$table = tableConstructor.createTable();
+					$table.addClass("configTable");
+					
+					var $headerTr = tableConstructor.addHeaderRow($table);
+					var $nameTh = tableConstructor.addHeaderCell($headerTr);
+					var $urlTh = tableConstructor.addHeaderCell($headerTr);
+					var $actionsTh = tableConstructor.addHeaderCell($headerTr);
+					$actionsTh.addClass("actionsTh");
+					$nameTh.text("Name");
+					$urlTh.text("Url");
+					$actionsTh.text("Actions");
 				
-				$('#addButton').click( function() {			
-							addChannel();			
-				} );
+					for (i=0; i < data.length; i++)
+					{
+						addRow(data[i]);
+					}
+					bindTableEvents();
+					
+					applyTableStyles();
+					
+					$(widgetElement).append($table);
+					drawButtonTable();
+					bindButtonTableEvents();
+				}
 				
+				
+				return this;
 			}
 			
-		
-			framework.extension.getItem("rssChannels",function(_channels)
+            function savePopUpSize() {
+                softomate.extension.setItem('popUpHeight', $('#heightSlider').slider('option', 'value'));
+                softomate.extension.setItem('popUpWidth', $('#widthSlider').slider('option', 'value'));
+            }
+            
+			$(document).ready(function()
 			{
-			
-				var channels=JSON.parse(_channels);
-				
-				for (i=0; i< channels.length; i++)
+                //window.alert('dfdff');
+                //debugger;
+                
+				configTable = new ConfigTable($("#configTableDiv"));
+				softomate.extension.getItem("rssChannels",function(_channels)
 				{
-					var channel=new Channel({name:channels[i].name,url:channels[i].url});
-					list.push(channel);
-				}
-				initChannelTable();
+					var channels=JSON.parse(_channels);
+					configTable.initTable(channels,function(data){
+					console.log(data);
+						softomate.extension.setItem("rssChannels",JSON.stringify(data));
+						softomate.extension.fireEvent("updateList",data);
+					});
+					
+				});
+				
 			});
-				
-				
-				
-		</script> 
+		
+		</script>
+	</head>
+	<body>
+	<div id="mainConfigDiv" style="margin-left:10px; font-family: sans-serif;">
+		<table>
+			<tbody>
+				<tr style="vertical-align: bottom;">
+					<td>
+						<img src="RSS-icon128.png"/>
+					</td>
+					<td>
+						<font style="font-size:40px; font-family:Arial;">Rss Reader Options</font>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+        <p style="font-size: 30px; margin-bottom: 10px;">Chanels</p>
+		<div style="">
+			<div  id="configTableDiv" style="width:660px;"> </div>
+		<div>
+        <p style="font-size: 30px; margin-bottom: 10px;">Pop-up window size</p>
+        <div style="font-size: 15px; margin-bottom: 10px;">
+            <p>Width:<span class="slider" id="widthSlider"></span><span id="widthValue">100</span>px</p>
+            <p>Height:<span class="slider" id="heightSlider"></span><span id="heightValue">200</span>px</p>
+        </div>
+        
+        <div id="saveButtonDiv"></div>
+	</div>
+		
 	</body>
 </html>
