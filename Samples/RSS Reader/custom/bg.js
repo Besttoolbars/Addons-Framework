@@ -8,11 +8,13 @@ var REQUEST_TIMEOUT_MS_ = 30 * 1000; // 30 seconds
 //var REQUEST_URL_ = 'http://lenta.ru/rss/';
 
 //var lastCountText = 'start';
-var requestTimeout=30000;
+var requestTimeout=10000;
 var isSignedIn = false;
 var list=[];
 var requestsArray=[];
 var requestInterval;
+
+var bageText = 0;
 
 
 softomate.extension.attachEvent("updateList",function(_list)
@@ -29,8 +31,8 @@ softomate.extension.attachEvent("updateList",function(_list)
     
 function init() {
 	softomate.extension.getItem("rssChannels", function(data) {
-		
-		if (data)
+		//debugger;
+		if (data != 'null' && data)
 		{
 			list = JSON.parse(data);
 		}
@@ -46,24 +48,121 @@ function init() {
 	
 }
 
-
+// Marks news as read or unred
+function markNews(oldData, newData) {
+    var newItems = newData.items,
+        oldItems = oldData.items,
+        newItem,
+        oldItem,
+        numberOfUnreadItems = 0;
+        
+    //debugger;
+    
+    for (newItem in newItems) {
+        if (newItems.hasOwnProperty(newItem)) {
+            for (oldItem in oldItems) {
+                if (oldItems.hasOwnProperty(oldItem)) {
+                    newItems[newItem].read = false;
+                    
+                    if (newItems[newItem].link == oldItems[oldItem].link) {
+                        newItems[newItem].read = oldItems[oldItem].read;
+                    }
+                }
+            }
+            
+            if (newItems[newItem].read == false) {
+                numberOfUnreadItems++;
+            }
+        }
+    }
+    
+    return numberOfUnreadItems;
+}
 
 function getChannelsData()
 {
-console.log($(list));
-	$.each($(list), function(i, channel) {
-		if (channel)
+    debugger;
+    var oldList;
+    
+	softomate.extension.getItem("rssChannels", function(data) {
+		if (data != 'null' && data)
 		{
-			sendChannelRequest(channel, function(data)
-			{
-			console.log(parseChannelData(data));
-				channel.data = parseChannelData(data);
-				
-				softomate.extension.setItem("rssChannels", JSON.stringify(list));
-			});
-		}		
+			oldList = JSON.parse(data);
+		}
+		else
+		{
+			var obj={name:"",url:""};
+			oldList.push(obj);
+			softomate.extension.setItem("rssChannels", JSON.stringify(oldList))
+		}
 	});
 
+    bageText = 0;
+
+    //var i = 0;
+    for (var channel in list) {
+        if (list.hasOwnProperty(channel)) {
+            var oldChanelData;
+            
+            if (list[channel])
+            {
+                //debugger;
+                
+                for (var oldChannel in oldList) {
+                    if (oldList.hasOwnProperty(oldChannel)) {
+                        if (oldList[oldChannel].url == list[channel].url) {
+                            oldChanelData = oldList[oldChannel].data;
+                        }
+                    }
+                }
+                
+                //oldChanelData = JSON.parse(JSON.stringify(channel.data));
+                
+                sendChannelRequest(channel, function(data)
+                {
+                    //console.log(parseChannelData(data));
+                    //debugger;
+                    channel.data = parseChannelData(data);
+                    
+                    debugger;
+                    bageText += markNews(oldChanelData, channel.data);
+                    
+                    softomate.extension.setItem("bageText", bageText);
+                    
+                    softomate.extension.setItem("rssChannels", JSON.stringify(list));
+                });
+            }	
+        }
+    }
+    
+	// $.each($(list), function(i, channel) {
+        // var oldChanelData;
+        
+		// if (channel)
+		// {
+            //debugger;
+            // oldChanelData = JSON.parse(JSON.stringify(channel.data));
+            
+			// sendChannelRequest(channel, function(data)
+			// {
+                //console.log(parseChannelData(data));
+                //debugger;
+				// channel.data = parseChannelData(data);
+                
+                // debugger;
+                // bageText += markNews(oldChanelData, channel.data);
+                
+                // softomate.extension.setItem("bageText", bageText);
+				
+				// softomate.extension.setItem("rssChannels", JSON.stringify(list));
+			// });
+		// }		
+	// });
+
+    softomate.extension.getItem("bageText", function (d) {
+        softomate.ui.button.setBadgeText(d);
+        //window.alert(d);
+    });
 }
 
 function parseChannelData(data)
@@ -73,7 +172,6 @@ function parseChannelData(data)
 	//console.log(xmlDoc);
     $channelElement = $xml.find("channel");
     $itemsElements = $xml.find("item");
- 
 	
 	var channelData = {};
 	channelData.link=$channelElement.find("link").eq(0).text();

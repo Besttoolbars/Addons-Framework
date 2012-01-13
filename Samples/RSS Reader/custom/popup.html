@@ -236,8 +236,16 @@
 				// contentContainer -  html element that contains content of News
 				function fillContent(newsContainer,contentItem)
 				{
-						$(newsContainer.contentContainer).html(contentItem.description);
-						$(newsContainer.titleContainer).html(contentItem.title);		
+                    var title = contentItem.title;
+                    
+                    //debugger;
+					$(newsContainer.contentContainer).html(contentItem.description);
+                    
+                    if (contentItem.read == false) {
+                        title += ' *';
+                    }
+                    
+                    $(newsContainer.titleContainer).html(title);
 				}
 				
 				// bind redirect event to news page
@@ -281,10 +289,52 @@
 					$(newsContainer.nextButtonImg).bind("click",function()
 					{
 						var content=dataManager.getContentByIndex(index);
+                        
 						if (content) 
 						{
 							if (i!=content.items.length-1) i++; else return;
+                            
 							switchNews(newsContainer,content.items[i],"left","right",100);
+                            
+                            content.items[i-1].read = true;
+                            softomate.extension.getItem("bageText", function (d) {
+                                var newValue = parseInt(d) - 1;
+                                
+                                softomate.ui.button.setBadgeText(newValue);
+                                softomate.extension.setItem("bageText", newValue);
+                                
+                                softomate.extension.getItem("rssChannels", function (chanels) {
+                                    var chanel;
+                                    
+                                    chanels = JSON.parse(chanels);
+
+                                    for (chanel in chanels) {
+                                        if (chanels.hasOwnProperty(chanel)) {
+                                            //debugger;
+                                            if (chanels[chanel].data &&
+                                                chanels[chanel].data.link == content.link &&
+                                                chanels[chanel].data.title == content.title) {
+                                                
+                                                //debugger;
+                                                for (var item in chanels[chanel].data.items) {
+                                                    if (chanels[chanel].data.items.hasOwnProperty(item)) {
+                                                        //debugger;
+                                                        chanels[chanel].data.items[item].read = content.items[item].read;
+                                                    }
+                                                }
+                                                //chanels[chanel].data = content;
+                                                
+                                                //debugger;
+                                            }
+                                        }
+                                    }
+                                    
+                                    softomate.extension.setItem("rssChannels", JSON.stringify(chanels));
+                                    console.log(chanels);
+                                    //debugger;
+                                });
+                                
+                            });
 						}
 					});
 												
