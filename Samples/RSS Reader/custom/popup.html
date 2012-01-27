@@ -388,7 +388,19 @@
                     }
                 });
 
-				softomate.ui.button.setPopup({url: 'popup.html', width: widthValue + 4, height: heightValue + 58});
+				var prH = 58;
+				var prW = 4;
+
+				if($.browser.opera){
+					prH = 38;
+					prW = -6;
+				}
+				else if($.browser.mozilla){
+					prH = 60;
+					prW = 4;
+				}
+
+				softomate.ui.button.setPopup({url: 'popup.html', width: widthValue + prW, height: heightValue + prH});
 
 				//safari.extension.globalPage.contentWindow.console.log(document.documentElement.clientHeight);
 				var channelTabs= new ChannelTabs();
