@@ -1,14 +1,15 @@
-﻿<html>
+﻿<!DOCTYPE html>
+<html>
 	<head>
 		<link rel="stylesheet" href="css/jquery.ui.all.css"> 
 		<link rel="stylesheet" href="css/additional.css"> 
-		<style>
+		<style type="text/css">
 		
 			html, body {
 			/*height:100%;*/
 			width: 100%;
-			padding: 0px;
-			margin:0px;
+			padding: 0;
+			margin:0;
 			}
 			
 			#channelTabs {
@@ -38,7 +39,7 @@
 			.titleNewsRow
 			{
 				height : 50px;
-				width" : 100%;
+				width : 100%;
 			}
 			
 			.titleNewsCell 
@@ -76,7 +77,7 @@
 			}
 		</style>
 		<script type="text/javascript" src="popup.js"></script>
-		<script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+		<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
 		<script type="text/javascript" src="jquery-ui-1.8.15.custom.min.js"></script>
 		<script type="text/javascript" src="TableConstructor.js"></script>
 		
@@ -194,6 +195,7 @@
 					
 					$innerContentDiv=$("<div>");
 					$innerContentDiv.addClass("innerContentNewsDiv");
+					$innerContentDiv.width(widthValue-36);
 					
 					$contentCell.append($innerContentDiv);
 					
@@ -330,7 +332,7 @@
                                     }
                                     
                                     softomate.extension.setItem("rssChannels", JSON.stringify(chanels));
-                                    console.log(chanels);
+                               //     console.log(chanels);
                                     //debugger;
                                 });
                                 
@@ -366,26 +368,28 @@
 				//softomate.extension.attachEvent("updateContent",initChannelTabs);
 			}
 			
-			
+			setTimeout(function(){
 	
 			$(document).ready(function()
 			{
-                    softomate.extension.getItem('popUpWidth', function (val) {
-                        if (!val) {
-                            softomate.extension.setItem('popUpWidth', widthValue);
-                        } else {
-                            widthValue = parseInt(val);
-                        }
-                    });
-                    
-                    softomate.extension.getItem('popUpHeight', function (val) {
-                        if (!val) {
-                            softomate.extension.setItem('popUpHeight', heightValue);
-                        } else {
-                            heightValue = parseInt(val);
-                        }
-                    });
-                    
+                softomate.extension.getItem('popUpWidth', function (val) {
+                    if (!val) {
+                        softomate.extension.setItem('popUpWidth', widthValue);
+                    } else {
+                        widthValue = parseInt(val);
+                    }
+                });
+
+                softomate.extension.getItem('popUpHeight', function (val) {
+                    if (!val) {
+                        softomate.extension.setItem('popUpHeight', heightValue);
+                    } else {
+                        heightValue = parseInt(val);
+                    }
+                });
+
+				softomate.ui.button.setPopup({url: 'popup.html', width: widthValue + 4, height: heightValue + 58});
+
 				//safari.extension.globalPage.contentWindow.console.log(document.documentElement.clientHeight);
 				var channelTabs= new ChannelTabs();
 				var dataManager;
@@ -404,13 +408,12 @@
 			softomate.extension.detachEvent("updateContent",initRssWidget);
 			softomate.extension.attachEvent("updateContent",initRssWidget);
 			initRssWidget();
-            
+
             document.getElementById('channelTabs').style.width = widthValue + 'px';
-            $('.innerContentNewsDiv').css({
-						height: (heightValue - 100) + 'px'
-					});
+            $('.innerContentNewsDiv').css({height: (heightValue - 100) + 'px' });
 				
 			});
+			},100);
 			
 				
 					
