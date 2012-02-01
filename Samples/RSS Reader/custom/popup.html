@@ -137,7 +137,7 @@
                             debugger;
 							//$( ui.panel ).height(heightValue);
 
-								console.log($(document).height()-$(".ui-tabs-nav").height());
+								//console.log($(document).height()-$(".ui-tabs-nav").height());
 								
 							//$( ui.panel ).height($(document).height()-$(".ui-tabs-nav").height()-parseInt($( ui.panel ).css("padding-bottom")) - parseInt($( ui.panel ).css("padding-top"))-9);
 								$( ui.panel ).append(tab_content);
@@ -302,7 +302,7 @@
                             softomate.extension.getItem("bageText", function (d) {
                                 var newValue = parseInt(d) - 1;
                                 
-                                softomate.ui.button.setBadgeText(newValue);
+                                softomate.extension.fireEvent('setBadgeText', newValue);
                                 softomate.extension.setItem("bageText", newValue);
                                 
                                 softomate.extension.getItem("rssChannels", function (chanels) {
@@ -400,7 +400,7 @@
 					prW = 4;
 				}
 
-				softomate.ui.button.setPopup({url: 'popup.html', width: widthValue + prW, height: heightValue + prH});
+				softomate.extension.fireEvent('setPopup', {url: 'popup.html', width: widthValue + prW, height: heightValue + prH});
 
 				//safari.extension.globalPage.contentWindow.console.log(document.documentElement.clientHeight);
 				var channelTabs= new ChannelTabs();
