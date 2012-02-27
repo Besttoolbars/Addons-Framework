@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<addon
+	version="1.0.0.0"
+	name="BestToolbars Demo Toolbar"
+	filename="BestToolbars"
+	description="BestToolbars Demo Toolbar"
+	url="http://besttoolbars.net/"
+	author="BestToolbars">
+	<interface />
+	<browser>
+        <opera		output=".\" />
+        <firefox	output=".\" />
+        <safari		output=".\" />
+        <ie			output=".\" />
+        <chrome		output=".\" />
+    </browser>
+    <content jquery="true">
+        <script src="content.js" />
+        <script src="jquery.autocomplete.js" />
+    </content>
+    <background>
+        <script src="bg.js" />
+    </background>
+</addon>
