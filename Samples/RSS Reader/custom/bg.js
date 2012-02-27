@@ -1,3 +1,10 @@
+softomate.extension.attachEvent('setPopup', function (obj) {
+    softomate.ui.button.setPopup(obj);
+});
+
+softomate.extension.attachEvent('setBadgeText', function (obj) {
+    softomate.ui.button.setBadgeText(obj);
+});
 
 
 var $RSS = function(){};
@@ -147,7 +154,7 @@ $RSS.prototype.getChannelsData = function()
 var RSS = new $RSS();
     RSS.init({requestTimeout : 10});
 
-    softomate.ui.button.setPopup({ url:"popup.html", width:400, height:300});
+    softomate.ui.button.setPopup({ url:"popup.html", width:505, height:355});
 
     softomate.ui.button.attachEvent('ButtonClick', function () {
         softomate.extension.fireEvent("updateContent",{});
