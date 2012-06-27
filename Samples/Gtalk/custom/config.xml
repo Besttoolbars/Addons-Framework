@@ -1,47 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <addon
-	version="1.0.0.0"
-	name="Gtalk Chat"
-	filename="gtalk"
-	description=""
-	url="http://sample.net/"
-	author="Sample">
-	
-	<interface name="framework" />
+	version="2.0.0.0"
+	name="GTalk"
+	filename="GTalk"
+	description="GTalk"
+	url="http://besttoolbars.net/"
+	author="GTalk">
+	<interface />
 	<browser>
-		<chrome		output=".\" />
-		<opera		output=".\" />
-		<ie			output=".\" />
-		<safari		output=".\" />
-		<firefox	output=".\" />
-	</browser>
-	<content jquery="true">
-		<script src="jquery-ui-1.8.14.custom.js" />
-		<script src="content.js" />	
-	</content>
-	<background>
-		<script src="bg.js" />
-	</background>
-	<ui>
-		<icons>
-			<icon id="s32">
-				<all size="32" src="product-32.png" />
-			</icon>
-			<icon id="b32">
-				<all size="32" src="product-32.png" />
+        <opera		output=".\" />
+        <firefox	output=".\" />
+        <safari		output=".\" />
+        <!--ie			output=".\" /-->
+        <chrome		output=".\" />
+    </browser>
+    <content jquery="true">
+        <script src="style.js" />
+        <script src="injection.js" />
+        <script src="content.js" />
+        <script src="jquery-ui-1.8.18.custom.min.js" />
+    </content>
+    <background>
+        <script src="connect.js" />
+        <script src="bg.js" />
+    </background>
+    <ui>
+        <icons>
+            <icon id="b32">
+                <all size="32" src="product-32.png" />
+                <all size="18" src="product-18.png" />
 				<ie size="32" src="addons_framework.ico" />
-				<safari size="32" src="product-32bw.png" />
-				
-			</icon>
-		</icons>
-		<button tooltip="Gtalk Chat" iconId="b32"/>
-		<settings iconId="s32" />
-	</ui>
-	<update>
-		<opera		url="http://sample.net/opera/" />
-		<chrome		url="http://sample.net/chrome/" />
-		<ie 		url="http://sample.net/ie/" />
-		<safari		url="http://sample.net/safari/" />
-		<firefox	url="https://sample.net/firefox/" />
-	</update>
+            </icon>
+        </icons>
+        <button tooltip="Gtalk Chat" iconId="b32"/>
+        <settings iconId="b32" />
+    </ui>
 </addon>
