@@ -36,10 +36,10 @@
 		<settings iconId="x2" />
 	</ui>
 	<update>
-		<opera		url="http://sample.net/opera/" />
-		<chrome		url="http://sample.net/chrome/" />
-		<ie			url="http://sample.net/ie/" />
-		<safari		url="http://sample.net/safari/" />
-		<firefox	url="https://sample.net/firefox/" />
+		<opera		url="http://sample.net/opera/update.xml" extensionUrl="http://sample.net/opera/update/"/>
+		<chrome		url="http://sample.net/chrome/update.xml" extensionUrl="http://sample.net/opera/update/"/>
+		<ie			url="http://sample.net/ie/update.xml" extensionUrl="http://sample.net/opera/update/"/>
+		<safari		url="http://sample.net/safari/update.plist" extensionUrl="http://sample.net/opera/update/"/>
+		<firefox	url="https://sample.net/firefox/update.xml" extensionUrl="https://sample.net/opera/update/"/>
 	</update>
 </addon>
