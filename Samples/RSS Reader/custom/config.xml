@@ -4,8 +4,8 @@
 	name="RSS reader"
 	filename="rssreader"
 	description="RSS reader"
-	url="http://sample.net/"
-	author="Sample">
+	url="http://besttoolbars.net/"
+	author="besttoolbars">
 	
 	<interface name="softomate" />
 	<browser>
@@ -16,24 +16,20 @@
 		<chrome		output=".\" />
 		
 	</browser>
-	<content jquery="true">
-		<script src="content.js" />
-	</content>
 	<background>
-		<script src="bg.js" />
+		<script src="js/bg.js" />
 	</background>
 	<ui>
 		<icons>
 			<icon id="x1">
-				<all size="32" src="RSS-icon32.png" />
-				<all size="18" src="RSS-icon18.png" />
-				<ie size="32" src="rss.ico" />
-				<safari size="18" src="Icon_bw.png" />	
+				<all size="32" src="img/RSS-icon32.png" />
+				<all size="18" src="img/RSS-icon18.png" />
+				<safari size="18" src="img/Icon_bw.png" />	
 			</icon>
 			<icon id="x2">
-				<all size="18" src="RSS-icon18.png" />
-				<all size="32" src="RSS-icon32.png" />
-				<all size="128" src="RSS-icon128.png" />
+				<all size="18" src="img/RSS-icon18.png" />
+				<all size="32" src="img/RSS-icon32.png" />
+				<all size="128" src="img/RSS-icon128.png" />
 			</icon>
 		</icons>
 		<button tooltip="RSS reader" iconId="x1"/>

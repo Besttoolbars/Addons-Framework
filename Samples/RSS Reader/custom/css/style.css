@@ -1,0 +1,145 @@
+html, body, p, ul {
+    font: 13px/16px arial;
+    margin: 0;
+    padding: 0;
+}
+body {
+    overflow: hidden;
+}
+.settings, a.drop-down {
+    color: #ffffff;
+    font-size: 11px;
+    position: absolute;
+    right: 10px;
+    top: 16px;
+    z-index: 100 !important;
+    text-decoration: none;
+}
+.settings:hover {
+    text-decoration: underline;
+}
+.buttonNewsTable {
+    position: absolute;
+    right: 4px;
+    z-index: 100;
+    bottom: 10px;
+}
+.next, .prev {
+    width: 22px;
+    height: 16px;
+    background: url("../img/prev_next.png") no-repeat 0 -22px;
+    margin: 0 4px;
+    cursor: pointer;
+}
+.prev {
+    background-position: -40px -22px;
+}
+.prev:hover {
+    background-position: -40px 0;
+}
+.next:hover {
+    background-position: 0 0;
+}
+.titleNewsCell {
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+    padding: 6px 12px;
+}
+.contentNewsCell {
+    padding: 6px 12px;
+    border-top: 1px solid #e6e6e6;
+}
+a{
+    color: #2377bb;
+    text-decoration: none;
+}
+a:hover
+{
+    text-decoration: underline;
+}
+.mainNewsDiv{
+    overflow:auto;
+}
+#channelTabs ul {
+    list-style: none;
+    background: #2377bb;
+    overflow: hidden;
+    padding: 0 80px 0 14px;
+    height: 40px;
+}
+#channelTabs ul li {
+    float: left;
+    margin: 10px 10px 0 0;
+    font-size: 14px;
+}
+    #channelTabs ul li a {
+        text-decoration: none;
+        color: #ffffff;
+        padding: 6px 16px 6px;
+        display: block;
+    }
+        #channelTabs ul li a:hover {
+            background: #63a3d7;
+        }
+#channelTabs ul li.ui-state-active a {
+    background: #fff;
+    color: #2377bb;
+    padding: 6px 16px 10px;
+}
+#channelTabs .ui-widget-content {
+    border-top: 2px dotted #63a3d7;
+}
+.ui-tabs .ui-tabs-hide { display: none !important; }
+
+a.drop-down
+{
+    right: 66px;
+    padding: 6px 10px 4px 10px;
+    background: #fff;
+    color: #2377bb;
+    text-decoration: none;
+    display: none;
+}
+
+#drop-down-list
+{
+    position: absolute;
+    background: #fff;
+    right: 66px;
+    padding: 0 0 10px 0;
+    top: 42px;
+    z-index: 1000;
+    width: 180px;
+    height: 120px;
+    display: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-box-shadow:  0px 2px 4px 1px rgba(0, 0, 0, 0.3);
+    box-shadow:  0px 2px 4px 1px rgba(0, 0, 0, 0.3);
+}
+#drop-down-list ul
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#drop-down-list ul a
+{
+    display: block;
+    padding: 6px 6px;
+}
+#drop-down-list ul a:hover
+{
+    background: #eee;
+}
+#transparent-overlay
+{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    display: none;
+}
