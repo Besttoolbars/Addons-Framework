@@ -6,24 +6,27 @@
 	description="RSS reader"
 	url="http://besttoolbars.net/"
 	author="besttoolbars">
-	
-	<interface name="softomate" />
+	<interface name="framework" />
 	<browser>
 		<opera		output=".\" />
-		<firefox	output=".\" />
+		<!--firefox	output=".\" />
 		<safari		output=".\" />
 		<ie			output=".\" />
-		<chrome		output=".\" />
+		<chrome		output=".\" /-->
 		
 	</browser>
 	<background>
 		<script src="js/bg.js" />
 	</background>
+	<content>
+		<script src="js/content.js" />
+	</content>
 	<ui>
 		<icons>
 			<icon id="x1">
 				<all size="32" src="img/RSS-icon32.png" />
 				<all size="18" src="img/RSS-icon18.png" />
+				<all size="16" src="img/RSS-icon16.png" />
 				<safari size="18" src="img/Icon_bw.png" />	
 			</icon>
 			<icon id="x2">

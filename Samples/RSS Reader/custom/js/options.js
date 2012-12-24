@@ -142,19 +142,16 @@
                     //////////////////////////////////////////////////////////////////////////////////////
                     $('#saveButtonDiv').append($closeButton).append($saveButton) ;
 
-                    $('.slider').slider();
+                    $('.slider').slider({
+                    	min: 200,
+                    	max:600
+                    });
                     
-                    //$('#heightSlider').slider('option', 'value', softomate.extension.getItem('popUpHeight'));
-                    //$('#widthSlider').slider('option', 'value', softomate.extension.getItem('popUpWidth'));
-                    
-                    $('#widthSlider').slider('option', 'min', 200);
-                    $('#widthSlider').slider('option', 'max', 600);
-                    
-                    softomate.extension.getItem('popUpWidth', function (val) {
+                    framework.extension.getItem('popUpWidth', function (val) {
                         var widthValue = 500;
                         
                         if (!val) {
-                            softomate.extension.setItem('popUpWidth', widthValue);
+                            framework.extension.setItem('popUpWidth', widthValue);
                         } else {
                             widthValue = parseInt(val);
                         }
@@ -165,14 +162,11 @@
                     
                     $('#widthSlider').bind('slide', function(event, ui) { $('#widthValue').text(ui.value); });
                     
-                    $('#heightSlider').slider('option', 'min', 100);
-                    $('#heightSlider').slider('option', 'max', 500);
-                    
-                    softomate.extension.getItem('popUpHeight', function (val) {
+                    framework.extension.getItem('popUpHeight', function (val) {
                         var heightValue = 300;
                         
                         if (!val) {
-                            softomate.extension.setItem('popUpHeight', heightValue);
+                            framework.extension.setItem('popUpHeight', heightValue);
                         } else {
                             heightValue = parseInt(val);
                         }
@@ -446,25 +440,27 @@
 			}
 			
             function savePopUpSize() {
-                softomate.extension.setItem('popUpHeight', $('#heightSlider').slider('option', 'value'));
-                softomate.extension.setItem('popUpWidth', $('#widthSlider').slider('option', 'value'));
+            	var w = $('#widthSlider').slider('option', 'value'),
+            		h = $('#heightSlider').slider('option', 'value')
+                framework.extension.setItem('popUpHeight', h);
+                framework.extension.setItem('popUpWidth', w);
+                framework.extension.fireEvent('setPopup', {data:{
+                	"width": w,
+                	"height": h,
+                	"url": "popup.html"
+                }});
             }
             
-			$(document).ready(function()
-			{
-                //window.alert('dfdff');
-                //debugger;
-                
+			window.setTimeout(function(){
 				configTable = new ConfigTable($("#configTableDiv"));
-				softomate.extension.getItem("rssChannels",function(_channels)
+				framework.extension.getItem("rssChannels",function(_channels)
 				{
 					var channels=JSON.parse(_channels);
 					configTable.initTable(channels,function(data){
-					//console.log(data);
-						softomate.extension.setItem("rssChannels",JSON.stringify(data));
-						softomate.extension.fireEvent("updateList",{data: data});
+						framework.extension.setItem("rssChannels",JSON.stringify(data));
+						framework.extension.fireEvent("updateList",{data: data});
 					});
 					
 				});
 				
-			});
+			}, 1000);

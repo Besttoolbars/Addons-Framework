@@ -161,7 +161,7 @@ function ChannelTabs() {
     function bindNewsRedirect(object, url) {
         $(object).unbind();
         $(object).bind("click", function () {
-            softomate.browser.navigate({url:url, tabId:null});
+            framework.browser.navigate({url:url, tabId:null});
         });
     }
 
@@ -196,13 +196,13 @@ function ChannelTabs() {
                 switchNews(newsContainer, content.items[i], "left", "right", 100);
 
                 content.items[i - 1].read = true;
-                softomate.extension.getItem("bageText", function (d) {
+                framework.extension.getItem("bageText", function (d) {
                     var newValue = parseInt(d) - 1;
 
-                    softomate.extension.fireEvent('setBadgeText', newValue);
-                    softomate.extension.setItem("bageText", newValue);
+                    framework.extension.fireEvent('setBadgeText', {data: newValue});
+                    framework.extension.setItem("bageText", newValue);
 
-                    softomate.extension.getItem("rssChannels", function (chanels) {
+                    framework.extension.getItem("rssChannels", function (chanels) {
                         var chanel;
 
                         try {
@@ -232,7 +232,7 @@ function ChannelTabs() {
                             }
                         }
 
-                        softomate.extension.setItem("rssChannels", JSON.stringify(chanels));
+                        framework.extension.setItem("rssChannels", JSON.stringify(chanels));
                         //     console.log(chanels);
                         //debugger;
                     });
@@ -261,26 +261,28 @@ function ChannelTabs() {
 
 function onLoad() {
     //initChannelTabs();
-    //softomate.extension.detachEvent("updateContent",initChannelTabs);
-    //softomate.extension.attachEvent("updateContent",initChannelTabs);
+    //framework.extension.detachEvent("updateContent",initChannelTabs);
+    //framework.extension.attachEvent("updateContent",initChannelTabs);
 }
 
 setTimeout(function () {
     $(document).ready(function () {
-        softomate.extension.getItem('popUpWidth', function (val) {
+        framework.extension.getItem('popUpWidth', function (val) {
             if (!val) {
-                softomate.extension.setItem('popUpWidth', widthValue);
+                framework.extension.setItem('popUpWidth', widthValue);
             } else {
                 widthValue = parseInt(val);
             }
+            document.getElementById('channelTabs').style.width = widthValue + 'px';
         });
 
-        softomate.extension.getItem('popUpHeight', function (val) {
+        framework.extension.getItem('popUpHeight', function (val) {
             if (!val) {
-                softomate.extension.setItem('popUpHeight', heightValue);
+                framework.extension.setItem('popUpHeight', heightValue);
             } else {
                 heightValue = parseInt(val);
             }
+            $('.innerContentNewsDiv').css({height:(heightValue - 100) + 'px' });
         });
 
         var prH = 58;
@@ -296,19 +298,17 @@ setTimeout(function () {
         }
 
         $('a.settings').click(function(){
-            softomate.browser.navigate({
+            framework.browser.navigate({
                 url: "options_page.html",
-                tabId: softomate.browser.NEWTAB
+                tabId: framework.browser.NEWTAB
             });
         });
-        softomate.extension.fireEvent('setPopup', {url:'popup.html', width:widthValue + prW, height:heightValue + prH});
-
-        //safari.extension.globalPage.contentWindow.console.log(document.documentElement.clientHeight);
+        
         var channelTabs = new ChannelTabs();
         var dataManager;
 
         function initRssWidget() {
-            softomate.extension.getItem("rssChannels", function (data) {
+            framework.extension.getItem("rssChannels", function (data) {
                 var channelTabs = new ChannelTabs();
                 dataManager = new DataManager(data);
                 channelTabs.initChannelTabs(dataManager);
@@ -316,12 +316,8 @@ setTimeout(function () {
         }
 
 
-        softomate.extension.detachEvent("updateContent", initRssWidget);
-        softomate.extension.attachEvent("updateContent", initRssWidget);
-        initRssWidget();
-
-        document.getElementById('channelTabs').style.width = widthValue + 'px';
-        $('.innerContentNewsDiv').css({height:(heightValue - 100) + 'px' });
-
+        framework.extension.detachEvent("updateContent", initRssWidget);
+        framework.extension.attachEvent("updateContent", initRssWidget);
+        window.setTimeout(initRssWidget, 100);
     });
 }, 100);

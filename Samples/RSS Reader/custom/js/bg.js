@@ -1,9 +1,9 @@
-softomate.extension.attachEvent('setPopup', function (obj) {
-    softomate.ui.button.setPopup(obj);
+framework.extension.attachEvent('setPopup', function (obj) {
+    framework.ui.button.setPopup(obj.data);
 });
 
-softomate.extension.attachEvent('setBadgeText', function (obj) {
-    softomate.ui.button.setBadgeText(obj);
+framework.extension.attachEvent('setBadgeText', function (obj) {
+    framework.ui.button.setBadgeText(obj.data);
 });
 
 
@@ -19,14 +19,14 @@ $RSS.prototype.init = function(options)
 
     var self = this;
 
-    softomate.extension.getItem("rssChannels", function(data) {
+    framework.extension.getItem("rssChannels", function(data) {
         if(data && data != '[]') {
             self.list = JSON.parse(data)
         } else {
             var obj = {name:"CNN", url:"http://rss.cnn.com/rss/edition_world.rss"};
 
             self.list.push(obj);
-            softomate.extension.setItem("rssChannels", JSON.stringify(self.list))
+            framework.extension.setItem("rssChannels", JSON.stringify(self.list))
         }
     });
 
@@ -84,7 +84,7 @@ $RSS.prototype.parseChannelData = function (data){
 
 $RSS.prototype._request = function(channel, callback)
 {
-    var request = softomate.extension.getRequest();
+    var request = framework.extension.getRequest();
 
     request.open("GET", channel.url, true);
 
@@ -109,14 +109,14 @@ $RSS.prototype.getChannelsData = function()
 
     self.countNews = 0;
 
-    softomate.extension.getItem("rssChannels", function(data) {
+    framework.extension.getItem("rssChannels", function(data) {
         if(data && data != '[]') {
             oldList = JSON.parse(data)
         } else {
             var obj = {name:"CNN", url:"http://rss.cnn.com/rss/edition_world.rss"};
 
             oldList.push(obj);
-            softomate.extension.setItem("rssChannels", JSON.stringify(self.list))
+            framework.extension.setItem("rssChannels", JSON.stringify(self.list))
         }
     });
 
@@ -134,14 +134,24 @@ $RSS.prototype.getChannelsData = function()
            }
 
            self.countNews += self.markNews(oldChanelData, self.list[i].data);
-           softomate.extension.setItem("rssChannels", JSON.stringify(self.list));
-           softomate.extension.setItem("bageText", self.countNews);
-           softomate.ui.button.setBadgeText(self.countNews);
+           framework.extension.setItem("rssChannels", JSON.stringify(self.list));
+           framework.extension.setItem("bageText", self.countNews);
+           framework.ui.button.setBadgeText(self.countNews);
       });
    });
 
-    softomate.extension.getItem("bageText", function (d) {
-        softomate.ui.button.setBadgeText(d);
+    framework.extension.getItem("bageText", function (d) {
+        d && framework.ui.button.setBadgeText(d);
+    });
+
+    framework.extension.getItem("popUpHeight", function (h) {
+        framework.extension.getItem("popUpWidth", function (w) {
+            framework.ui.button.setPopup({
+                "url": "popup.html",
+                "width": w || 500,
+                "height": h || 400
+            })
+        });
     });
 
     self.timeOut = setTimeout(function(){
@@ -154,13 +164,11 @@ $RSS.prototype.getChannelsData = function()
 var RSS = new $RSS();
     RSS.init({requestTimeout : 10});
 
-    softomate.ui.button.setPopup({ url:"popup.html", width:505, height:355});
-
-    softomate.ui.button.attachEvent('ButtonClick', function () {
-        softomate.extension.fireEvent("updateContent",{});
+    framework.ui.button.attachEvent('ButtonClick', function () {
+        framework.extension.fireEvent("updateContent",{});
     });
 
-    softomate.extension.attachEvent("updateList",function(e)
+    framework.extension.attachEvent("updateList",function(e)
     {
         RSS.list = e.data;
         RSS.getChannelsData();
