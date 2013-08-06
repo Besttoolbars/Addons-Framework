@@ -33,10 +33,11 @@ var $WT = function(){};
 			toolbar.css({"width" : w});
 		};
 
-
+		if($ && $.browser){
 		if($.browser.msie && parseInt($.browser.version) < 9)
 			{toolbar.css(this.get('style')['toolbarIE'+parseInt($.browser.version)])}
-
+		}
+			
 		$('body').css({
 			marginTop:38 + parseInt($('body').css('marginTop')),
 			position:'relative'
@@ -167,17 +168,20 @@ var $WT = function(){};
 			SearchList.append(option);
 		});
 
+		if($ && $.browser){
 		if($.browser.msie && parseInt($.browser.version) < 9)
 			{ inputBox.css(this.get('style')['searchInputBoxIE'])}
-
+		}
 		var send = $('<send />')
 				.css(this.get('style')['searchSend'])
 				.text('Search')
 				.click(function(){self.goTo()});
 
+		if($ && $.browser){
 		if($.browser.msie && parseInt($.browser.version) < 9)
 			{ send.css(this.get('style')['searchSendIE']);}
-
+		}
+			
 		searchBox
 			.append(SearchList)
 			.append(ico)
@@ -319,9 +323,11 @@ var $WT = function(){};
 			.css(self.get('style')['menu'])
 			.html(self.buildList(options['items']));
 
+		if($ && $.browser){
 		if($.browser.msie && parseInt($.browser.version) < 9)
 			{menu.css(self.get('style')['menuIE'])}
-
+		}
+			
 		this.get('toolbar')[options['method']](menu);
 
 		menu.find('ul ul').hide()
@@ -331,8 +337,10 @@ var $WT = function(){};
 		menu.find('ul:eq(0)').css({padding:0});
 		menu.find('ul:eq(0)>li').css(self.get('style')['menu-ul-li']).last().css({borderRight:0});
 
+		if($ && $.browser){
 		if($.browser.msie && parseInt($.browser.version) < 9)
 			{menu.find('ul:eq(0)>li').css(self.get('style')['menuIE-ul-li'])}
+		}
 
 		menu.find('ul a').css(self.get('style')['menu-ul-li-a'])
 			.hover(function(){
@@ -352,10 +360,14 @@ var $WT = function(){};
 					{
 						var left = el.parent().parent().width();
 
+						if($ && $.browser){
 						left += $.browser.msie ? -20 : 0;
-
-						var top = $.browser.msie ? -1 :0;
-
+						}
+						var top = 0;
+						if($ && $.browser){
+						top = $.browser.msie ? -1 :0;
+						}
+						
 						el.css({
 							top:top,
 							left:left

@@ -1,5 +1,5 @@
 framework.extension.attachEvent('ButtonClicked', function(e) {
-	$(document).ready(function(){
+	jQuery(document).ready(function(){
 		R = 0;
 		x1 = .1;
 		y1 = .05;
@@ -23,7 +23,7 @@ framework.extension.attachEvent('ButtonClicked', function(e) {
 				DIS.top = (Math.cos(R * y1 + i * y2 + y3) * y4 + y5) + "px"
 			}
 			R++
-		}, 5);
+		}, 5); 
 	});	
 });
 

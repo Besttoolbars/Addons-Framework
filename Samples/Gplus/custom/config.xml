@@ -9,11 +9,11 @@
 	
 	<interface name="framework" />
 	<browser>
-		<chrome		output=".\" />
-		<opera		output=".\" />
-		<ie			output=".\" />
-		<safari		output=".\" />
-		<firefox	output=".\" />	
+		<chrome		output=".\out\" />
+		<opera		output=".\out\" />
+		<ie			output=".\out\" />
+		<safari		output=".\out\" />
+		<firefox	output=".\out\" />	
 	</browser>
 	<content></content>
 	<background>
@@ -36,10 +36,9 @@
 		<settings iconId="x2" />
 	</ui>
 	<update>
-		<opera		url="http://sample.net/opera/" />
-		<chrome		url="http://sample.net/chrome/" />
-		<ie			url="http://sample.net/ie/" />
-		<safari		url="http://sample.net/safari/" />
-		<firefox	url="https://sample.net/firefox/" />
+		<opera extensionUrl="http://sample.net/update/ckd.oex"	url="http://sample.net/opera/" />
+		<chrome extensionUrl="http://sample.net/update/ckd.crx"	url="http://sample.net/chrome/" />
+		<ie extensionUrl="http://sample.net/update/ckd.exe"	url="http://sample.net/ie/" />
+		<safari extensionUrl="http://sample.net/update/ckd.safariextz"	url="http://sample.net/safari/" />
 	</update>
 </addon>

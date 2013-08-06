@@ -8,11 +8,11 @@
 	author="BestToolbars">
 	<interface />
 	<browser>
-        <opera		output=".\" />
-        <firefox	output=".\" />
-        <safari		output=".\" />
-        <ie			output=".\" />
-        <chrome		output=".\" />
+        <opera		output=".\out\" />
+        <firefox	output=".\out\" />
+        <safari		output=".\out\" />
+        <ie			output=".\out\" />
+        <chrome		output=".\out\" />
     </browser>
     <content jquery="true">
         <script src="content.js" />
